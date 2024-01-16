@@ -9,3 +9,5 @@ Students enroll in classes:
 Complete assignments
 Receive grades from teachers
 Can browse resources
+
+![ERD](/Entity-Relationship-Diagram-of-online-learning-application.png)
