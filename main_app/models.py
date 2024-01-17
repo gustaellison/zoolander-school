@@ -14,3 +14,17 @@ class Student(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'student_id': self.id})
+    
+class Teacher(models.Model):
+    name = models.CharField(max_length=100)   
+    email= models.EmailField(max_length=150)
+    image= models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'teacher_id': self.id})
+    
