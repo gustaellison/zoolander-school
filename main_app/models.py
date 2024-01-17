@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from datetime import date
 
 # Create your models here.
 class Student(models.Model):
@@ -27,4 +28,14 @@ class Teacher(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'teacher_id': self.id})
+    
+class Classroom(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(max_length=250)
+    image= models.CharField(max_length=300)
+    schedule = models.DateField('Schedule')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher_id = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     
