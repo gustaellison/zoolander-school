@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Student List</h1>
+    <p><a href="{% url 'student_create' %}">Add a Student</a></p>
     {% for student in students %}
         <div>
             <p>Name: {{ student.name }}</p>

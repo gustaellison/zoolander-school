@@ -1,0 +1,12 @@
+{% extends 'base_student.html' %}
+{% block content %}
+
+<h1>Add Student</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="fname">First Name</label><input type="text"><br>
+    <label for="lname">Last Name</label><input type="text"><br>
+    <input type="submit" value="submit">
+</form>
+
+{% endblock %}
