@@ -1,6 +1,11 @@
 from django.shortcuts import render,redirect
+<<<<<<< HEAD
+from django.views.generic.edit import CreateView
+from .models import Student, Classroom
+=======
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Student
+>>>>>>> 83b2dcd399baf3f96228d8b95c3f294211652c32
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -60,6 +65,14 @@ class StudentCreate(LoginRequiredMixin,CreateView):
     # Assign the logged in user (self.request.user)
       form.instance.user = self.request.user  # form.instance is the cat
     # Let the CreateView do its job as usual
+<<<<<<< HEAD
+     return super().form_valid(form)
+   
+def classroom_details(request):
+    # Retrieve a classroom instance, you can modify this based on your logic
+    classroom_instance = Classroom.objects.first()
+    return render(request, 'classrooms/detail.html', {'classroom': classroom_instance})
+=======
       return super().form_valid(form)
     
 class StudentUpdate(LoginRequiredMixin, UpdateView):
@@ -73,3 +86,4 @@ class StudentUpdate(LoginRequiredMixin, UpdateView):
 class StudentDelete(DeleteView):
   model = Student
   success_url = '/students'
+>>>>>>> 83b2dcd399baf3f96228d8b95c3f294211652c32
