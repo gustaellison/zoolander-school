@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from datetime import date
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Student(models.Model):
@@ -9,6 +11,7 @@ class Student(models.Model):
     image = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     gpa = models.IntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
@@ -36,6 +39,6 @@ class Classroom(models.Model):
     schedule = models.DateField('Schedule')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher_id = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     
