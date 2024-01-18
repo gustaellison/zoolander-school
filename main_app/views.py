@@ -21,6 +21,18 @@ def student_detail(request, student_id):
     student = Student.objects.get(id=student_id)
     return render(request, 'students/detail.html', {'student': student})
 
+def spanish_page(request):
+    # Add any logic you need for the Spanish class page
+    return render(request, 'classes/spanish.html')
+
+def reading_page(request):
+    # Add any logic you need for the Spanish class page
+    return render(request, 'classes/reading.html')
+
+def science_page(request):
+    # Add any logic you need for the Spanish class page
+    return render(request, 'classes/science.html')
+
 def signup(request):
   error_message = ''
   if request.method == 'POST':
