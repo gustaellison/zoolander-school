@@ -8,6 +8,11 @@
 <form method="POST" action="{% url 'signup' %}">
   {% csrf_token %}
   {{ form.as_p }}
+  <label for="id_role">Select Role:</label>
+  <select name="role" id="id_role">
+    <option value="student">Student</option>
+    <option value="teacher">Teacher</option>
+  </select>
   <input type="submit" class="btn" value="Sign Up">
 </form>
 
