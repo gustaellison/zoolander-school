@@ -44,5 +44,6 @@ class Classroom(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.CharField(max_length=100)
+    #teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     
