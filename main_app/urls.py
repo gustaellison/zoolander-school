@@ -10,9 +10,8 @@ urlpatterns = [
     path('students/<int:pk>/delete/', views.StudentDelete.as_view(), name='student_delete'),
     path('students/<int:student_id>/', views.student_detail, name="student_detail"),
     path('accounts/signup/', views.signup, name='signup'),
-    path('classes/spanish.html', views.spanish_page, name='spanish_page'),
-    path('classes/reading.html', views.reading_page, name='spanish_page'),
-    path('classes/science.html', views.science_page, name='spanish_page'),
+    path('classrooms/', views.ClassroomList.as_view(), name='classrooms_index'),
+    path('classrooms/<int:pk>/', views.ClassroomDetail.as_view(), name='classroom_detail'),
     path('grades_overview.html', GradesView.as_view(), name='grades_view'),
     path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
 ]

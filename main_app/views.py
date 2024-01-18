@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Student
+from django.views.generic import ListView, DetailView
+from .models import Student, Classroom, Teacher
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -44,18 +45,6 @@ def student_detail(request, student_id):
     student = Student.objects.get(id=student_id)
     return render(request, 'students/detail.html', {'student': student})
 
-def spanish_page(request):
-    # Add any logic you need for the Spanish class page
-    return render(request, 'classes/spanish.html')
-
-def reading_page(request):
-    # Add any logic you need for the Spanish class page
-    return render(request, 'classes/reading.html')
-
-def science_page(request):
-    # Add any logic you need for the Spanish class page
-    return render(request, 'classes/science.html')
-
 def signup(request):
   error_message = ''
   if request.method == 'POST':
@@ -65,9 +54,14 @@ def signup(request):
     if form.is_valid():
       # This will add the user to the database
       user = form.save()
+      role = request.POST.get('role')
       # This is how we log a user in via code
+      if role == "student":
+        student = Student.objects.create(user=user)
+      elif role == 'teacher':
+        teacher = Teacher.objects.create(user=user)
       login(request, user)
-      return redirect('student_index')
+      return redirect('/')
     else:
       error_message = 'Invalid sign up - try again'
   # A bad POST or a GET request, so render signup.html with an empty form
@@ -96,3 +90,9 @@ class StudentUpdate(LoginRequiredMixin, UpdateView):
 class StudentDelete(DeleteView):
   model = Student
   success_url = '/students'
+  
+class ClassroomDetail(DetailView):
+  model = Classroom
+  
+class ClassroomList(ListView):
+  model = Classroom
