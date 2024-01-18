@@ -32,9 +32,9 @@
                       Classes
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Spanish</a></li>
-                      <li><a class="dropdown-item" href="#">Reading</a></li>
-                      <li><a class="dropdown-item" href="#">Science</a></li>
+                      <li><a class="dropdown-item" href="/classes/spanish.html">Spanish</a></li>
+                      <li><a class="dropdown-item" href="/classes/reading.html">Reading</a></li>
+                      <li><a class="dropdown-item" href="/classes/science.html">Science</a></li>
                     </ul>
                   </li>
                   <li class="nav-item">
@@ -47,7 +47,10 @@
                     <a class="nav-link" href="#">Zoom</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <form method="post" action="{% url 'logout' %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn-flat white-text">logout</button>
+                    </form>
                   </li>
                   {% else %}
                   <li><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>

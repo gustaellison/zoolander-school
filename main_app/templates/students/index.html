@@ -2,12 +2,14 @@
 {% block content %}
 
     <h1>Student List</h1>
-    <a href="/students/{{ student.id }}"></a>
     {% for student in students %}
         <div>
-            <p>Name: {{ student.name }}</p>
-            <p>GPA: {{ student.gpa }}</p>
+            <a href="{% url 'student_detail' student.id %}">
+                <p>Name: {{ student.name }}</p>
+            </a>
+                <p>GPA: {{ student.gpa }}</p>
         </div>
+        <a href="{% url 'student_delete' student.id %}">Delete Student</a><br><br>
     {% endfor %}
     <p><a href="{% url 'student_create' %}">Add a Student</a></p>
 </body>

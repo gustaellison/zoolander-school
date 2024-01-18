@@ -1,6 +1,11 @@
 from django.shortcuts import render,redirect
+<<<<<<< HEAD
 from django.views.generic.edit import CreateView
 from .models import Student, Classroom
+=======
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Student
+>>>>>>> 83b2dcd399baf3f96228d8b95c3f294211652c32
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -20,6 +25,18 @@ def student_index(request):
 def student_detail(request, student_id):
     student = Student.objects.get(id=student_id)
     return render(request, 'students/detail.html', {'student': student})
+
+def spanish_page(request):
+    # Add any logic you need for the Spanish class page
+    return render(request, 'classes/spanish.html')
+
+def reading_page(request):
+    # Add any logic you need for the Spanish class page
+    return render(request, 'classes/reading.html')
+
+def science_page(request):
+    # Add any logic you need for the Spanish class page
+    return render(request, 'classes/science.html')
 
 def signup(request):
   error_message = ''
@@ -46,11 +63,27 @@ class StudentCreate(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
     # Assign the logged in user (self.request.user)
-     form.instance.user = self.request.user  # form.instance is the cat
+      form.instance.user = self.request.user  # form.instance is the cat
     # Let the CreateView do its job as usual
+<<<<<<< HEAD
      return super().form_valid(form)
    
 def classroom_details(request):
     # Retrieve a classroom instance, you can modify this based on your logic
     classroom_instance = Classroom.objects.first()
     return render(request, 'classrooms/detail.html', {'classroom': classroom_instance})
+=======
+      return super().form_valid(form)
+    
+class StudentUpdate(LoginRequiredMixin, UpdateView):
+  model = Student
+  fields = '__all__'
+
+  def form_valid(self, form):
+    form.instance.user = self.request.user
+    return super().form_valid(form)
+
+class StudentDelete(DeleteView):
+  model = Student
+  success_url = '/students'
+>>>>>>> 83b2dcd399baf3f96228d8b95c3f294211652c32
