@@ -1,11 +1,8 @@
 from django.shortcuts import render,redirect
-<<<<<<< HEAD
 from django.views.generic.edit import CreateView
 from .models import Student, Classroom
-=======
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Student
->>>>>>> 83b2dcd399baf3f96228d8b95c3f294211652c32
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
