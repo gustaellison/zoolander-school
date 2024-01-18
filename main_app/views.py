@@ -5,8 +5,31 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.views import View
+from .models import  Assignment, Grade
 # Create your views here.
+
+
+class GradesView(View):
+    def get(self, request, *args, **kwargs):
+       
+        students = Student.objects.all()
+        overall_gpa = calculate_overall_gpa(students)  # Implement a function to calculate overall GPA
+
+        return render(request, 'grades_overview.html', {'students': students, 'overall_gpa': overall_gpa})
+
+class StudentGradesView(View):
+    def get(self, request, student_id, *args, **kwargs):
+        student = Student.objects.get(id=student_id)
+        assignments = Assignment.objects.filter(student=student)
+        grades = Grade.objects.filter(student=student)
+
+        return render(request, 'student_grades.html', {'student': student, 'assignments': assignments, 'grades': grades})
+def calculate_overall_gpa(students):
+    
+    total_gpa = sum(student.gpa for student in students)
+    overall_gpa = total_gpa / len(students) if students else 0
+    return overall_gpa
 
 def home(request):
     return render(request, 'home.html')

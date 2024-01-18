@@ -1,0 +1,12 @@
+{% extends 'base_student.html' %}
+{% block content %}
+
+<h1>{{ student.name }}'s Grades</h1>
+
+<ul>
+    {% for assignment in assignments %}
+        <li>{{ assignment.name }}: {{ assignment.grade.grade }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

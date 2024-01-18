@@ -21,7 +21,15 @@ class Student(models.Model):
     
     def get_absolute_url(self):
         return reverse('student_index')
+class Assignment(models.Model):
     
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)    
+
+class Grade(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
+    grade = models.DecimalField(max_digits=5, decimal_places=2)
+
 class Teacher(models.Model):
     name = models.CharField(max_length=100)   
     email= models.EmailField(max_length=150)

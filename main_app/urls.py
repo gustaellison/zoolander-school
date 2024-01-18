@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import GradesView, StudentGradesView
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -12,4 +13,6 @@ urlpatterns = [
     path('classes/spanish.html', views.spanish_page, name='spanish_page'),
     path('classes/reading.html', views.reading_page, name='spanish_page'),
     path('classes/science.html', views.science_page, name='spanish_page'),
+    path('grades_overview.html', GradesView.as_view(), name='grades_view'),
+    path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
 ]
