@@ -5,7 +5,17 @@
 
 <div>
     <table>
-        {{form.as_table}}
+        <th>
+            <tr>
+                <p>Student Name: {{ student.name }}</p>
+                <p>Student GPA: {{ student.gpa }}</p>
+                <p>Student Email: {{ student.email }}</p>
+                <p>Student Image: {{ student.image }}</p>
+                <p>Student Grade: {{ student.grade }}</p>
+                <p>Student Address: {{ student.address }}</p>
+                <p>Parent Contact: {{ student.parents }}</p>
+            </tr>
+        </th>
     </table>
 </div>
 
