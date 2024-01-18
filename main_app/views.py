@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.views.generic.edit import CreateView
-from .models import Student
+from .models import Student, Classroom
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -49,3 +49,8 @@ class StudentCreate(LoginRequiredMixin,CreateView):
      form.instance.user = self.request.user  # form.instance is the cat
     # Let the CreateView do its job as usual
      return super().form_valid(form)
+   
+def classroom_details(request):
+    # Retrieve a classroom instance, you can modify this based on your logic
+    classroom_instance = Classroom.objects.first()
+    return render(request, 'classrooms/detail.html', {'classroom': classroom_instance})
