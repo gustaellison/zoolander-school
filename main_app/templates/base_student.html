@@ -47,7 +47,7 @@
                     <a class="nav-link" href="#">Zoom</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                   </li>
                   {% else %}
                   <li><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
