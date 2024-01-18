@@ -1,0 +1,13 @@
+{% extends 'base_student.html' %}
+{% block content %}
+
+<h1>Grades Overview</h1>
+    <p>Overall GPA: {{ overall_gpa }}</p>
+
+    <ul>
+        {% for student in students %}
+            <li><a href="{% url 'student_grades' student.id %}">{{ student.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
