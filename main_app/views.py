@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Student
+from django.views.generic import ListView, DetailView
+from .models import Student, Classroom
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -20,18 +21,6 @@ def student_index(request):
 def student_detail(request, student_id):
     student = Student.objects.get(id=student_id)
     return render(request, 'students/detail.html', {'student': student})
-
-def spanish_page(request):
-    # Add any logic you need for the Spanish class page
-    return render(request, 'classes/spanish.html')
-
-def reading_page(request):
-    # Add any logic you need for the Spanish class page
-    return render(request, 'classes/reading.html')
-
-def science_page(request):
-    # Add any logic you need for the Spanish class page
-    return render(request, 'classes/science.html')
 
 def signup(request):
   error_message = ''
@@ -73,3 +62,9 @@ class StudentUpdate(LoginRequiredMixin, UpdateView):
 class StudentDelete(DeleteView):
   model = Student
   success_url = '/students'
+  
+class ClassroomDetail(DetailView):
+  model = Classroom
+  
+class ClassroomList(ListView):
+  model = Classroom
