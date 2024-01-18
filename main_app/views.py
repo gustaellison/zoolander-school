@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Student
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -46,6 +46,18 @@ class StudentCreate(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
     # Assign the logged in user (self.request.user)
-     form.instance.user = self.request.user  # form.instance is the cat
+      form.instance.user = self.request.user  # form.instance is the cat
     # Let the CreateView do its job as usual
-     return super().form_valid(form)
+      return super().form_valid(form)
+    
+class StudentUpdate(LoginRequiredMixin, UpdateView):
+  model = Student
+  fields = '__all__'
+
+  def form_valid(self, form):
+    form.instance.user = self.request.user
+    return super().form_valid(form)
+
+class StudentDelete(DeleteView):
+  model = Student
+  success_url = '/students'

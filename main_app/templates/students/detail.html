@@ -5,17 +5,26 @@
 
 <div>
     <table>
-        <th>
-            <tr>
-                <p>Student Name: {{ student.name }}</p>
-                <p>Student GPA: {{ student.gpa }}</p>
-                <p>Student Email: {{ student.email }}</p>
-                <p>Student Image: {{ student.image }}</p>
-                <p>Student Grade: {{ student.grade }}</p>
-                <p>Student Address: {{ student.address }}</p>
-                <p>Parent Contact: {{ student.parents }}</p>
-            </tr>
-        </th>
+        <tr>
+            <th>Edit</th>
+            <th>Name</th>
+            <th>GPA</th>
+            <th>Email</th>
+            <th>Image</th>
+            <th>Grade</th>
+            <th>Address</th>
+            <th>Parent Contact</th>
+        </tr>
+        <tr>
+            <td><a href="{% url 'student_update' student.id %}">Edit</a></td>
+            <td>{{ student.name }}</td>
+            <td>{{ student.gpa }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.image }}</td>
+            <td>{{ student.grade }}</td>
+            <td>{{ student.address }}</td>
+            <td>{{ student.parents }}</td>
+        </tr>
     </table>
 </div>
 
