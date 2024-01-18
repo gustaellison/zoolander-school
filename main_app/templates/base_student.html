@@ -37,9 +37,11 @@
                       <li><a class="dropdown-item" href="/classes/science.html">Science</a></li>
                     </ul>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="students/">Students</a>
-                  </li>
+                      {% if user.teacher %}
+                        <li class="nav-item">
+                          <a class="nav-link" href="students/">Students</a>
+                        </li>
+                      {% endif %}
                   <li class="nav-item">
                     <a class="nav-link" href="#">Grades</a>
                   </li>

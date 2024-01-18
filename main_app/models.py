@@ -14,7 +14,7 @@ class Student(models.Model):
     grade = models.IntegerField(default=100)
     address = models.CharField(max_length=300, default='None Listed')
     parents = models.CharField(max_length=200, default='None Listed')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
     
     def __str__(self):
         return self.name
@@ -28,6 +28,7 @@ class Teacher(models.Model):
     image= models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', default=None)
 
     def __str__(self):
         return self.name
