@@ -14,7 +14,7 @@ class Student(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('index', kwargs={'student_id': self.id})
+        return reverse('student_index')
     
 class Teacher(models.Model):
     name = models.CharField(max_length=100)   
