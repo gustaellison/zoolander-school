@@ -13,6 +13,21 @@
       <p>{{ classroom.description }}</p>
       <img src="{{ classroom.image }}" alt="{{ classroom.name }}" class="img-fluid">
 
+      <ul class="nav nav-tabs" id="myTabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#tab-content-1">Announcements</a>
+        </li><br><br><br>
+        <!-- Add more tabs as needed -->
+      </ul>
+      <div class="tab-content mt-3">
+        <!-- Tab 1 Content -->
+        <div class="tab-pane fade show active" id="tab-content-1">
+          <h4>Announcements</h4>
+          <p>{{ classroom.announcements }}</p>
+          <p><a href='{% url "announcement_create" classroom.id %}'>Create New Announcement</a></p>
+        </div>
+        <!-- Add more tab contents as needed -->
+      </div>
       <!-- Tab Navigation -->
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">
