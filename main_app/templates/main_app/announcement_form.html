@@ -5,7 +5,6 @@
 {% for classroom in classrooms %}
     <form action="{% url 'announcement_create' classroom.id %}" method="POST">
         {% csrf_token %}
-        {{ form.errors }}
         <table>
             {{ form.as_table }}
         </table>
@@ -14,6 +13,4 @@
 {% endfor %}
 
 {% endblock %}
-
-
 

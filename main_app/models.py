@@ -49,10 +49,16 @@ class Classroom(models.Model):
     description = models.TextField(max_length=250)
     image= models.CharField(max_length=300)
     schedule = models.DateField('Schedule')
-    announcements = models.CharField(max_length=500, default="No Announcements Yet")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     teacher = models.CharField(max_length=100)
     #teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
+class Announcement(models.Model):
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=500, default=None)
+    title = models.CharField(max_length=100)
     
