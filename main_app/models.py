@@ -73,10 +73,22 @@ class Classroom(models.Model):
     description = models.TextField(max_length=250)
     image= models.CharField(max_length=300)
     schedule = models.DateField('Schedule')
-    announcements = models.CharField(max_length=500, default="No Announcements Yet")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(Student)
     # teacher = models.CharField(max_length=100, default="no teacher")
     teachers = models.ManyToManyField(Teacher)
     
+    def __str__(self):
+        return self.name
+    
+
+class Announcement(models.Model):
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=500, default=None)
+    title = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ['-created_at']

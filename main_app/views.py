@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView, DetailView
 from .models import Student, Classroom, Teacher
 from django.contrib.auth import login
@@ -9,12 +9,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import  Assignment, Grade
 from .models import AssignmentForm
+from .forms import AnnouncementForm
 # Create your views here.
 
 
 class GradesView(View):
     def get(self, request, *args, **kwargs):
-       
         students = Student.objects.all()
         overall_gpa = calculate_overall_gpa(students)  # Implement a function to calculate overall GPA
 
@@ -36,6 +36,29 @@ def calculate_overall_gpa(students):
 
 def home(request):
     return render(request, 'home.html')
+
+def add_announcement(request, classroom_id):
+  form = AnnouncementForm(request.POST)
+  print(form.data)
+  if form.is_valid():
+    new_announcement = form.save(commit=False)
+    new_announcement.classroom_id = classroom_id
+    new_announcement.save()
+  return redirect('classroom_detail', pk=classroom_id)
+
+class AnnouncementFormView(FormView):
+  template_name = 'announcement_form.html'
+  form_class = AnnouncementForm
+  success_url = '/classrooms/'
+  def form_valid(self, form):
+    classroom_id = self.kwargs['classroom_id']
+    return super().form_valid(form)
+  
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    classroom_id = self.kwargs.get('classroom_id')
+    context['classroom_id'] = classroom_id
+    return context
 
 @login_required
 def student_index(request):
@@ -101,15 +124,6 @@ class AssignmentListView(View):
         assignments = Assignment.objects.all()
         return render(request, 'assignment_list.html', {'assignments': assignments})
     
-
-class AnnouncementCreate(LoginRequiredMixin, CreateView):
-  model = Classroom
-  fields = '__all__'
-
-  def form_valid(self, form):
-    form.instance.teacher = self.request.user.name
-    form.instance.student = self.request.user.name
-    return super().form_valid(form)
     
 class StudentUpdate(LoginRequiredMixin, UpdateView):
   model = Student
@@ -125,7 +139,7 @@ class StudentDelete(DeleteView):
   
 class ClassroomDetail(DetailView):
   model = Classroom
-  
+
 class ClassroomList(ListView):
   model = Classroom
 
