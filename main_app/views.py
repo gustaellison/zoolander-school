@@ -83,14 +83,8 @@ class AnnouncementCreate(LoginRequiredMixin, CreateView):
   fields = '__all__'
 
   def form_valid(self, form):
-    print("Entering form_valid method")
-
     classroom_id = self.kwargs.get('classroom_id')
-    print(f"Classroom ID: {classroom_id}")
-
     form.instance.classroom_id = classroom_id        
-    print(f"Form instance classroom_id set to: {form.instance.classroom_id}")
-
     form.instance.teacher = self.request.user.name
     form.instance.student = self.request.user
     return super().form_valid(form)
