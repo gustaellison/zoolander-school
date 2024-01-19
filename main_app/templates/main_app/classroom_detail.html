@@ -30,6 +30,11 @@
             <p>{{ announcement.title }}</p>
             <p>{{ announcement.created_at }}</p>
             <p>{{ announcement.description }}</p>
+            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a><br>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a><br><br><br>
+            {% for comment in announcement.comment_set.all %}
+              <p>{{ comment.description }}</p>
+            {% endfor %}
           {% endfor %}
         </div>
         <!-- Add more tab contents as needed -->

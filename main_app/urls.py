@@ -1,6 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView
+from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -12,6 +12,9 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('classrooms/<int:classroom_id>/announcement/create/', views.AnnouncementFormView.as_view(), name='announcement_form'),
     path('add_announcement/<int:classroom_id>/', views.add_announcement, name='add_announcement'),
+    path('classrooms/<int:classroom_id>/announcement/delete/', AnnouncementDelete.as_view(), name='announcement_delete'),
+    path('classrooms/<int:classroom_id>/<int:announcement_id>/create/', views.CommentFormView.as_view(), name='comment_form'),
+    path('classrooms/<int:classroom_id>/<int:announcement_id>/', views.add_comment, name='add_comment'),
     path('classrooms/', views.ClassroomList.as_view(), name='classrooms_index'),
     path('classrooms/<int:pk>/', views.ClassroomDetail.as_view(), name='classroom_detail'),
     path('grades_overview.html', GradesView.as_view(), name='grades_view'),
