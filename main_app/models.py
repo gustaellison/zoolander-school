@@ -49,6 +49,7 @@ class Classroom(models.Model):
     description = models.TextField(max_length=250)
     image= models.CharField(max_length=300)
     schedule = models.DateField('Schedule')
+    announcements = models.CharField(max_length=500, default="No Announcements Yet")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

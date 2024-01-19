@@ -79,6 +79,16 @@ class StudentCreate(LoginRequiredMixin,CreateView):
     # Let the CreateView do its job as usual
       return super().form_valid(form)
     
+
+class AnnouncementCreate(LoginRequiredMixin, CreateView):
+  model = Classroom
+  fields = '__all__'
+
+  def form_valid(self, form):
+    form.instance.teacher = self.request.user.name
+    form.instance.student = self.request.user.name
+    return super().form_valid(form)
+    
 class StudentUpdate(LoginRequiredMixin, UpdateView):
   model = Student
   fields = '__all__'
