@@ -1,0 +1,16 @@
+{% extends 'base_student.html' %}
+{% block content %}
+
+<h1>Teacher Dashboard</h1>
+
+{% if assignments %}
+    <ul>
+        {% for assignment in assignments %}
+            <li>{{ assignment.name }} - Assigned to: {{ assignment.student.name }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No assignments available.</p>
+{% endif %}
+
+{% endblock %}
