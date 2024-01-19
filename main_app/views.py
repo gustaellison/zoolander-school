@@ -128,3 +128,16 @@ class ClassroomDetail(DetailView):
   
 class ClassroomList(ListView):
   model = Classroom
+
+
+class ClassroomUpdate(LoginRequiredMixin, UpdateView):
+  model = Classroom
+  fields = ['name', 'description', 'schedule']
+
+class ClassroomDelete(LoginRequiredMixin, DeleteView):
+  model = Classroom
+  success_url = '/classrooms'
+  
+class ClassroomCreate(LoginRequiredMixin, CreateView):
+  model = Classroom
+  fields = '__all__'

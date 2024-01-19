@@ -4,15 +4,18 @@
 <h1>Classroom Directory</h1>
 
 {% for classroom in classroom_list %}
-  <a href="{% url 'classroom_detail' classroom.id %}">
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title">{{ classroom.name }}</span>
-        <p>Decription: {{ classroom.description}}</p>
-      </div>
+<a href="{% url 'classroom_detail' classroom.id %}">
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">{{ classroom.name }}</span>
+      <p>Decription: {{ classroom.description}}</p>
     </div>
-  </a>
-{% endfor %}
 
+  </div>
+</a>
+{% endfor %}
+<div>
+  <li><a href="{% url 'classroom_create' %}">Add a Class</a></li>
+</div>
 
 {% endblock %}
