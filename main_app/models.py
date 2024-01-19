@@ -21,8 +21,15 @@ class Student(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('detail',kwargs={'student_id': self.id})
+        return reverse('student_index')
+class Assignment(models.Model):
+    
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)    
 
+class Grade(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
+    grade = models.DecimalField(max_digits=5, decimal_places=2)
 
 class Teacher(models.Model):
     name = models.CharField(max_length=100)   
@@ -69,7 +76,7 @@ class Classroom(models.Model):
     announcements = models.CharField(max_length=500, default="No Announcements Yet")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.CharField(max_length=100)
-    #teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    students = models.ManyToManyField(Student)
+    # teacher = models.CharField(max_length=100, default="no teacher")
+    teachers = models.ManyToManyField(Teacher)
     
