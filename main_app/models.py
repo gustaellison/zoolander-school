@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
+from django import forms
 
 
 # Create your models here.
@@ -15,20 +16,13 @@ class Student(models.Model):
     address = models.CharField(max_length=300, default='None Listed')
     parents = models.CharField(max_length=200, default='None Listed')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
-    
+
     def __str__(self):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('student_index')
-class Assignment(models.Model):
-    
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)    
+        return reverse('detail',kwargs={'student_id': self.id})
 
-class Grade(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
-    grade = models.DecimalField(max_digits=5, decimal_places=2)
 
 class Teacher(models.Model):
     name = models.CharField(max_length=100)   
@@ -42,7 +36,30 @@ class Teacher(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'teacher_id': self.id})
+        return reverse('detail', kwargs={'teacher_id': self.id})    
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return reverse('student_index')
+        
+class Assignment(models.Model):
+    
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)    
+
+class Grade(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
+    grade = models.DecimalField(max_digits=5, decimal_places=2)
+
+class AssignmentForm(forms.ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ['student', 'teacher', 'name']    
+
+
     
 class Classroom(models.Model):
     name = models.CharField(max_length=100)
