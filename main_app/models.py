@@ -22,15 +22,7 @@ class Student(models.Model):
     
     def get_absolute_url(self):
         return reverse('student_index')
-class Assignment(models.Model):
     
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)    
-
-class Grade(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
-    grade = models.DecimalField(max_digits=5, decimal_places=2)
-
 class Teacher(models.Model):
     name = models.CharField(max_length=100)   
     email= models.EmailField(max_length=150)
@@ -49,24 +41,7 @@ class Teacher(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('student_index')
-        
-class Assignment(models.Model):
-    
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)    
-
-class Grade(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
-    grade = models.DecimalField(max_digits=5, decimal_places=2)
-
-class AssignmentForm(forms.ModelForm):
-    class Meta:
-        model = Assignment
-        fields = ['student', 'teacher', 'name']    
-
-
+        return reverse('student_index')    
     
 class Classroom(models.Model):
     name = models.CharField(max_length=100)
@@ -78,5 +53,31 @@ class Classroom(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(Student)
     # teacher = models.CharField(max_length=100, default="no teacher")
-    teachers = models.ManyToManyField(Teacher)
+    teachers = models.ManyToManyField(Teacher)    
+
+    def __str__(self):
+        return self.name
+    
+
+class Assignment(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    google_drive_link = models.URLField(blank=True, null=True)
+    due_date = models.DateField(blank=True, null=True)
+
+
+class Grade(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
+    grade = models.DecimalField(max_digits=5, decimal_places=2)
+
+class AssignmentForm(forms.ModelForm):
+    google_drive_link = forms.URLField(label='Google Drive Link', required=False)
+    class Meta:
+        model = Assignment
+        fields = ['student', 'teacher', 'classroom', 'name', 'google_drive_link', 'due_date']  
+
+    
+
     

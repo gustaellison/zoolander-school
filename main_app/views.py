@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import  Assignment, Grade
 from .models import AssignmentForm
+from django.core.exceptions import PermissionDenied
 # Create your views here.
 
 
@@ -88,9 +89,9 @@ def create_assignment(request):
         if form.is_valid():
             assignment = form.save(commit=False)
             teacher = Teacher.objects.get(user=request.user)
-            assignment.teacher = teacher  # Assign the logged-in teacher
+            assignment.teacher = teacher  
             assignment.save()
-            return redirect('assignment_list')  # Redirect to a page displaying all assignments
+            return redirect('assignment_list')  
     else:
         form = AssignmentForm()
 
@@ -128,3 +129,14 @@ class ClassroomDetail(DetailView):
   
 class ClassroomList(ListView):
   model = Classroom
+
+
+class AssignmentDelete(LoginRequiredMixin, DeleteView):
+    model = Assignment
+    template_name = 'assignment_confirm_delete.html'  # Create a confirmation template
+    success_url = '/assignment_list'  # Redirect to the assignment list after deletion
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        # Check if the user is the teacher who created the assignment
+        return obj

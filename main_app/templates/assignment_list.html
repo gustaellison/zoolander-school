@@ -1,4 +1,4 @@
-{% extends 'base_student.html' %}
+{% extends 'base.html' %}
 {% block content %}
 
 <h1>Teacher Dashboard</h1>
@@ -6,8 +6,15 @@
 {% if assignments %}
     <ul>
         {% for assignment in assignments %}
-            <li>{{ assignment.name }} - Assigned to: {{ assignment.student.name }}</li>
+            <li>
+                {{ assignment.name }} - Assigned to: {{ assignment.student.name }} - Due Date: {{ assignment.due_date }}
+                <a href="{% url 'assignment_delete' assignment.id %}">Delete</a>
+                {% if assignment.google_drive_link %}
+                    - Google Drive: <a href="{{ assignment.google_drive_link }}" target="_blank">{{ assignment.google_drive_link }}</a>
+                {% endif %}
+            </li>
         {% endfor %}
+        <a class="nav-link" href="/">Back to Dashboard</a>
     </ul>
 {% else %}
     <p>No assignments available.</p>
