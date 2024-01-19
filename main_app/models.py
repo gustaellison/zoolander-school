@@ -92,3 +92,16 @@ class Announcement(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=300, default=None)
+
+    class Meta: 
+        ordering = ['-created_at']
