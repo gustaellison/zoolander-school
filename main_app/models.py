@@ -79,6 +79,9 @@ class Classroom(models.Model):
     # teacher = models.CharField(max_length=100, default="no teacher")
     teachers = models.ManyToManyField(Teacher)
     
+    def __str__(self):
+        return self.name
+    
 
 class Announcement(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
@@ -86,3 +89,6 @@ class Announcement(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=500, default=None)
     title = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ['-created_at']
