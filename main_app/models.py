@@ -82,6 +82,8 @@ class Classroom(models.Model):
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return reverse('classroom_detail', args=[str(self.id)])
 
 class Announcement(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)

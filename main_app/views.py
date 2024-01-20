@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView, DetailView
 from .models import Student, Classroom, Teacher, Announcement
@@ -175,6 +176,9 @@ class ClassroomDelete(LoginRequiredMixin, DeleteView):
 class ClassroomCreate(LoginRequiredMixin, CreateView):
   model = Classroom
   fields = '__all__'
+  
+  def get_success_url(self):
+        return reverse('classroom_create')
   
 class AnnouncementDelete(DeleteView):
   model = Announcement
