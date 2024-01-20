@@ -118,7 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-LOGIN_REDIRECT_URL = '/students/'
+LOGIN_REDIRECT_URL = '/students_detail/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type

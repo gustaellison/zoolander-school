@@ -27,19 +27,13 @@
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                   </li>
+
                   <li class="nav-item dropdown">
                     {% if user.is_authenticated %}
-                    <a class="nav-link dropdown-toggle" href="{% url 'classrooms_index' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Classes
-                    </a>
-                    <!-- <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="/classes/spanish.html">Spanish</a></li>
-                      <li><a class="dropdown-item" href="/classes/reading.html">Reading</a></li>
-                      <li><a class="dropdown-item" href="/classes/science.html">Science</a></li>
-                    </ul> -->
                   </li>
                       {% if user.teacher %}
-                        <li class="nav-item">
+                      <li class="nav-item">
+                          <a class="nav-link" href="classrooms/">Classes</a>
                           <a class="nav-link" href="students/">Students</a>
                           <a class = "nav-link" href="create_assignment">Assignment</a>
                         </li>
@@ -56,6 +50,7 @@
                       <button type="submit" class="btn-flat white-text">logout</button>
                     </form>
                   </li>
+
                   {% else %}
                   <li><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
                   <li><a class="nav-link" href="{% url 'login' %}">Log In</a></li>

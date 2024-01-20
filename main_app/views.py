@@ -164,6 +164,18 @@ class ClassroomDetail(DetailView):
 class ClassroomList(ListView):
   model = Classroom
 
+class ClassroomUpdate(LoginRequiredMixin, UpdateView):
+  model = Classroom
+  fields = ['name', 'description', 'schedule']
+
+class ClassroomDelete(LoginRequiredMixin, DeleteView):
+  model = Classroom
+  success_url = '/classrooms'
+  
+class ClassroomCreate(LoginRequiredMixin, CreateView):
+  model = Classroom
+  fields = '__all__'
+  
 class AnnouncementDelete(DeleteView):
   model = Announcement
   success_url = '/classrooms'
@@ -172,3 +184,4 @@ class AnnouncementDelete(DeleteView):
         classroom_id = self.kwargs.get('classroom_id')
         title = self.kwargs.get('title')  
         return get_object_or_404(Announcement, classroom_id=classroom_id, title=title)
+

@@ -56,9 +56,12 @@
         </div>
         <!-- Add more tab contents as needed -->
       </div>
-    </div>
+        <div class="card-action">
+          <a href="{% url 'classroom_update' classroom.id %}">Edit</a>
+          <a href="{% url 'classroom_delete' classroom.id %}">Delete</a>
+      </div>
+   </div>
   </div>
 </div>
-
 
 {% endblock %}
