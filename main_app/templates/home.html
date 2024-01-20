@@ -1,6 +1,53 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>HOME</h1>
+<h1>Student Dashboard</h1>
+<br><br><br>
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <h1>Upcoming Work</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Teacher</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assignment in assignments %}
+                        <tr>
+                            <td>{{ assignment.name }}</td>
+                            <td>{{ assignment.teacher }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <h1>My Classes</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Schedule</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for classroom in classrooms %}
+                        <tr>
+                            <td>{{ classroom.name }}</td>
+                            <td>{{ classroom.schedule }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <h4>Need Help?</h4>
+    <p>Click <a href='{% url "help_index" %}'>here</a> to access our FAQs about the site!</p>
+</div>
 
 {% endblock %}
