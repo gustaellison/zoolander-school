@@ -22,6 +22,7 @@ class Student(models.Model):
     
     def get_absolute_url(self):
         return reverse('student_index')
+    
 class Assignment(models.Model):
     
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

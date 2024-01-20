@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import  Assignment, Grade
 from .models import AssignmentForm
-from .forms import AnnouncementForm, CommentForm
+from .forms import AnnouncementForm, CommentForm, TeacherForm
 # Create your views here.
 
 
@@ -35,8 +35,11 @@ def calculate_overall_gpa(students):
     overall_gpa = total_gpa / len(students) if students else 0
     return overall_gpa
 
-def home(request):
+def home_index(request):
     return render(request, 'home.html')
+
+def meeting_index(request):
+  return render(request, 'meeting.html')
 
 def add_comment(request, announcement_id):
   form = CommentForm(request.POST)
@@ -81,11 +84,37 @@ class AnnouncementFormView(FormView):
     classroom_id = self.kwargs.get('classroom_id')
     context['classroom_id'] = classroom_id
     return context
+  
+
+def add_profile(request, classroom_id):
+  form = TeacherForm(request.POST)
+  if form.is_valid():
+    new_profile = form.save(commit=False)
+    new_profile.classroom_id = classroom_id
+    new_profile.save()
+  return redirect('classroom_detail', pk=classroom_id)
+
+class TeacherFormView(FormView):
+  template_name = 'profile_form.html'
+  form_class = TeacherForm
+  success_url = '/classrooms/'
+  def form_valid(self, form):
+    classroom_id = self.kwargs['classroom_id']
+    return super().form_valid(form)
+  
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    classroom_id = self.kwargs.get('classroom_id')
+    context['classroom_id'] = classroom_id
+    return context
 
 @login_required
 def student_index(request):
     students = Student.objects.filter(user=request.user)
     return render(request, 'students/index.html', {'students': students})
+
+def help_index(request):
+  return render(request, 'help/index.html')
 
 @login_required
 def student_detail(request, student_id):
