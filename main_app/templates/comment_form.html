@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Create New Comment</h1>
+    <form action="{% url 'add_comment' announcement_id %}" method="POST">
+        {% csrf_token %}
+        {{ form.errors }}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}

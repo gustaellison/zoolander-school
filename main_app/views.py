@@ -1,7 +1,7 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView, DetailView
-from .models import Student, Classroom, Teacher
+from .models import Student, Classroom, Teacher, Announcement
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import  Assignment, Grade
 from .models import AssignmentForm
-from .forms import AnnouncementForm
+from .forms import AnnouncementForm, CommentForm
 # Create your views here.
 
 
@@ -37,9 +37,30 @@ def calculate_overall_gpa(students):
 def home(request):
     return render(request, 'home.html')
 
+def add_comment(request, announcement_id):
+  form = CommentForm(request.POST)
+  if form.is_valid():
+    new_comment = form.save(commit=False)
+    new_comment.announcement_id = announcement_id
+    new_comment.save()
+  return redirect('classroom_detail', pk=announcement_id)
+
+class CommentFormView(FormView):
+  template_name = 'comment_form.html'
+  form_class = CommentForm
+  success_url = '/classrooms/'
+  def form_valid(self, form):
+    announcement_id = self.kwargs['announcement_id']
+    return super().form_valid(form)
+  
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    announcement_id = self.kwargs.get('announcement_id')
+    context['announcement_id'] = announcement_id
+    return context
+
 def add_announcement(request, classroom_id):
   form = AnnouncementForm(request.POST)
-  print(form.data)
   if form.is_valid():
     new_announcement = form.save(commit=False)
     new_announcement.classroom_id = classroom_id
@@ -143,7 +164,6 @@ class ClassroomDetail(DetailView):
 class ClassroomList(ListView):
   model = Classroom
 
-
 class ClassroomUpdate(LoginRequiredMixin, UpdateView):
   model = Classroom
   fields = ['name', 'description', 'schedule']
@@ -155,3 +175,13 @@ class ClassroomDelete(LoginRequiredMixin, DeleteView):
 class ClassroomCreate(LoginRequiredMixin, CreateView):
   model = Classroom
   fields = '__all__'
+  
+class AnnouncementDelete(DeleteView):
+  model = Announcement
+  success_url = '/classrooms'
+
+  def get_object(self, queryset=None):
+        classroom_id = self.kwargs.get('classroom_id')
+        title = self.kwargs.get('title')  
+        return get_object_or_404(Announcement, classroom_id=classroom_id, title=title)
+
