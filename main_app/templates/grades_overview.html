@@ -3,11 +3,23 @@
 
 <h1>Grades Overview</h1>
     <p>Overall GPA: {{ overall_gpa }}</p>
-
-    <ul>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope='col'>#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Grade</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for student in students %}
-            <li><a href="{% url 'student_grades' student.id %}">{{ student.name }}</a></li>
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'student_grades' student.id %}">{{ student.name }}</a></td>
+                <td>{{ student.grade }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </tbody>
+</table>
 
 {% endblock %}

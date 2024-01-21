@@ -3,10 +3,23 @@
 
 <h1>{{ student.name }}'s Grades</h1>
 
-<ul>
-    {% for assignment in assignments %}
-        <li>{{ assignment.name }}: {{ assignment.grade.grade }}</li>
-    {% endfor %}
-</ul>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope='col'>#</th>
+            <th scope="col">Assignment</th>
+            <th scope="col">Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for assignment in assignments %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ assignment.name }}</td>
+                <td>{{ assignment.grade.grade }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
