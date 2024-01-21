@@ -12,6 +12,15 @@
       <h2>{{ classroom.name }}</h2>
       <p>{{ classroom.description }}</p>
       <img src="{{ classroom.image }}" alt="{{ classroom.name }}" class="img-fluid">
+      <p>Zoom Link: {{ classroom.zoom_link }}</p>
+      {% if user.teacher %}
+        <form method="post" action="{% url 'classroom_detail' pk=classroom.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Zoom Link</button>
+        </form>
+      {% endif %}
+
 
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">

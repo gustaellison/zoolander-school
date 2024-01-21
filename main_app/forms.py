@@ -18,3 +18,5 @@ class TeacherForm(ModelForm):
     class Meta:
         model = Teacher
         fields = ['name', 'email', 'image']
+
+        

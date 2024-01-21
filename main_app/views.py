@@ -11,6 +11,7 @@ from django.views import View
 from .models import  Assignment, Grade
 from .models import AssignmentForm
 from .forms import AnnouncementForm, CommentForm, TeacherForm
+from .models import ZoomLinkForm
 # Create your views here.
 
 
@@ -162,9 +163,9 @@ def create_assignment(request):
         if form.is_valid():
             assignment = form.save(commit=False)
             teacher = Teacher.objects.get(user=request.user)
-            assignment.teacher = teacher  # Assign the logged-in teacher
+            assignment.teacher = teacher  
             assignment.save()
-            return redirect('assignment_list')  # Redirect to a page displaying all assignments
+            return redirect('assignment_list')  
     else:
         form = AssignmentForm()
 
@@ -174,6 +175,15 @@ class AssignmentListView(View):
     def get(self, request, *args, **kwargs):
         assignments = Assignment.objects.all()
         return render(request, 'assignment_list.html', {'assignments': assignments})
+    
+class AssignmentDelete(LoginRequiredMixin, DeleteView):
+    model = Assignment
+    template_name = 'assignment_confirm_delete.html'  # Create a confirmation template
+    success_url = reverse_lazy('assignment_list')  # Redirect to the assignment list after deletion
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        return obj    
     
     
 class StudentUpdate(LoginRequiredMixin, UpdateView):
@@ -217,4 +227,25 @@ class AnnouncementDelete(DeleteView):
         classroom_id = self.kwargs.get('classroom_id')
         title = self.kwargs.get('title')  
         return get_object_or_404(Announcement, classroom_id=classroom_id, title=title)
+  
+def meeting_index(request):
+    classrooms = Classroom.objects.all()
+    return render(request, 'meeting.html', {'classrooms': classrooms}) 
+
+class ClassroomDetail(FormView):
+    template_name = 'classroom_detail.html'
+    form_class = ZoomLinkForm
+
+    def form_valid(self, form):
+        classroom_id = self.kwargs['pk']
+        classroom = Classroom.objects.get(pk=classroom_id)
+        classroom.zoom_link = form.cleaned_data['zoom_link']
+        classroom.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        classroom_id = self.kwargs.get('pk')
+        context['classroom'] = Classroom.objects.get(pk=classroom_id)
+        return context
 

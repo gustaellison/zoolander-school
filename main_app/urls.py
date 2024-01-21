@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete
+from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete
 
 urlpatterns = [
     path('', views.home_index, name='home_index'),
@@ -27,5 +27,7 @@ urlpatterns = [
     path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
     path('create_assignment/', create_assignment, name='create_assignment'),
     path('assignment_list/', AssignmentListView.as_view(), name='assignment_list'),
+    path('assignment/<int:pk>/delete/', AssignmentDelete.as_view(), name='assignment_confirm_delete'),
     path('help/', views.help_index, name='help_index'),
+    path('meeting/', views.meeting_index, name='meeting_index'),
 ]
