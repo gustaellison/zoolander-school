@@ -8,7 +8,7 @@
         {% for assignment in assignments %}
             <li>
                 {{ assignment.name }} - Assigned to: {{ assignment.student.name }} - Due Date: {{ assignment.due_date }}
-                <a href="{% url 'assignment_delete' assignment.id %}">Delete</a>
+                <a href="{% url 'assignment_confirm_delete' assignment.id %}">Delete</a>
                 {% if assignment.google_drive_link %}
                     - Google Drive: <a href="{{ assignment.google_drive_link }}" target="_blank">{{ assignment.google_drive_link }}</a>
                 {% endif %}

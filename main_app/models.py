@@ -23,6 +23,7 @@ class Student(models.Model):
     def get_absolute_url(self):
         return reverse('student_index')
     
+    
 class Teacher(models.Model):
     name = models.CharField(max_length=100)   
     email= models.EmailField(max_length=150)
@@ -53,10 +54,13 @@ class Classroom(models.Model):
     students = models.ManyToManyField(Student)
     # teacher = models.CharField(max_length=100, default="no teacher")
     teachers = models.ManyToManyField(Teacher)
+    zoom_link = models.URLField(blank=True, null=True)
     
     def __str__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return reverse('classroom_detail', args=[str(self.id)])
 
 class Assignment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -65,6 +69,11 @@ class Assignment(models.Model):
     name = models.CharField(max_length=255)
     google_drive_link = models.URLField(blank=True, null=True)
     due_date = models.DateField(blank=True, null=True)
+
+class ZoomLinkForm(forms.ModelForm):
+    class Meta:
+        model = Classroom
+        fields = ['zoom_link']    
 
 
 class Grade(models.Model):
@@ -88,4 +97,17 @@ class Announcement(models.Model):
     title = models.CharField(max_length=100)
 
     class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    description = models.CharField(max_length=300, default=None)
+
+    class Meta: 
         ordering = ['-created_at']

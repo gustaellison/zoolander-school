@@ -12,6 +12,15 @@
       <h2>{{ classroom.name }}</h2>
       <p>{{ classroom.description }}</p>
       <img src="{{ classroom.image }}" alt="{{ classroom.name }}" class="img-fluid">
+      <p>Zoom Link: {{ classroom.zoom_link }}</p>
+      {% if user.teacher %}
+        <form method="post" action="{% url 'classroom_detail' pk=classroom.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Zoom Link</button>
+        </form>
+      {% endif %}
+
 
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">
@@ -30,6 +39,11 @@
             <p>{{ announcement.title }}</p>
             <p>{{ announcement.created_at }}</p>
             <p>{{ announcement.description }}</p>
+            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a><br>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a><br><br><br>
+            {% for comment in announcement.comment_set.all %}
+              <p>{{ comment.description }}</p>
+            {% endfor %}
           {% endfor %}
         </div>
         <!-- Add more tab contents as needed -->
@@ -51,9 +65,37 @@
         </div>
         <!-- Add more tab contents as needed -->
       </div>
-    </div>
+
+      <ul class="nav nav-tabs" id="myTabs">
+        <li class="nav-item">
+          <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#tab-content-1">Meet the Teacher!</a>
+        </li><br><br><br>
+        <!-- Add more tabs as needed -->
+      </ul>
+      <div>
+        <a href="/classrooms/{{ classroom.id }}/profile/create/">Add Teacher Profile</a>
+      </div>
+      <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="tab-content-1">
+          <h4>Teacher Profile:</h4>
+          {% for profile in classroom.profile_set.all %}
+            <p>{{ announcement.title }}</p>
+            <p>{{ announcement.created_at }}</p>
+            <p>{{ announcement.description }}</p>
+            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a><br>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a><br><br><br>
+            {% for comment in announcement.comment_set.all %}
+              <p>{{ comment.description }}</p>
+            {% endfor %}
+          {% endfor %}
+        </div>
+
+        <div class="card-action">
+          <a href="{% url 'classroom_update' classroom.id %}">Edit</a>
+          <a href="{% url 'classroom_delete' classroom.id %}">Delete</a>
+      </div>
+   </div>
   </div>
 </div>
-
 
 {% endblock %}

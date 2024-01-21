@@ -1,9 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView,AssignmentDelete
+from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.home_index, name='home_index'),
+    path('meeting/', views.meeting_index, name='meeting_index'),
     path('students/', views.student_index, name='student_index'),
     path('students/create/', views.StudentCreate.as_view(), name='student_create'),
     path('students/<int:pk>/update/', views.StudentUpdate.as_view(), name='student_update'),
@@ -12,11 +13,21 @@ urlpatterns = [
     path('accounts/signup/', views.signup, name='signup'),
     path('classrooms/<int:classroom_id>/announcement/create/', views.AnnouncementFormView.as_view(), name='announcement_form'),
     path('add_announcement/<int:classroom_id>/', views.add_announcement, name='add_announcement'),
+    path('classrooms/<int:classroom_id>/profile/create/', views.TeacherFormView.as_view(), name='teacher_form'),
+    path('add_profile/<int:classroom_id>/', views.add_profile, name='add_profile'),
+    path('classrooms/<int:classroom_id>/announcement/delete/', AnnouncementDelete.as_view(), name='announcement_delete'),
+    path('classrooms/<int:classroom_id>/<int:announcement_id>/create/', views.CommentFormView.as_view(), name='comment_form'),
+    path('classrooms/<int:classroom_id>/<int:announcement_id>/', views.add_comment, name='add_comment'),
     path('classrooms/', views.ClassroomList.as_view(), name='classrooms_index'),
     path('classrooms/<int:pk>/', views.ClassroomDetail.as_view(), name='classroom_detail'),
+    path('classrooms/create/', views.ClassroomCreate.as_view(), name='classroom_create'),
+    path('classrooms/<int:pk>/update/', views.ClassroomUpdate.as_view(), name='classroom_update'),
+    path('classrooms/<int:pk>/delete/', views.ClassroomDelete.as_view(), name='classroom_delete'),
     path('grades_overview.html', GradesView.as_view(), name='grades_view'),
     path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
     path('create_assignment/', create_assignment, name='create_assignment'),
     path('assignment_list/', AssignmentListView.as_view(), name='assignment_list'),
-     path('assignment/<int:pk>/delete/', AssignmentDelete.as_view(), name='assignment_delete'),
+    path('assignment/<int:pk>/delete/', AssignmentDelete.as_view(), name='assignment_confirm_delete'),
+    path('help/', views.help_index, name='help_index'),
+    path('meeting/', views.meeting_index, name='meeting_index'),
 ]

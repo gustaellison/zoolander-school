@@ -8,11 +8,15 @@
     <div class="card">
       <div class="card-content">
         <span class="card-title">{{ classroom.name }}</span>
-        <p>Description: {{ classroom.description}}</p>
+        <p>Zoom Link: {{ classroom.zoom_link }}</p>
+        <p>Decription: {{ classroom.description}}</p>
+
       </div>
     </div>
   </a>
 {% endfor %}
-
+<div>
+  <li><a href="{% url 'classroom_create' %}">Add a Class</a></li>
+</div>
 
 {% endblock %}
