@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="/static/admin/css/dark.css" type="text/css" media="(prefers-color-scheme: dark)" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        let toggleButton = document.getElementById('toggle');
+        let currentTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', currentTheme);
+        toggleButton.addEventListener('click', function () {
+          currentTheme = (currentTheme === 'light') ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-bs-theme', currentTheme);
+          localStorage.setItem('theme', currentTheme);
+    });
+  });
+    </script>
 </head>
 
 <body>
@@ -53,11 +64,13 @@
                       <button type="submit" class="btn-flat white-text">Logout</button>
                     </form>
                   </li>
-
                   {% else %}
                   <li><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
                   <li><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
                   {% endif %}
+                  <li class="nav-item">
+                    <button id="toggle" type="button" class="btn" data-bs-toggle="button">Light/Dark Mode</button>
+                  </li>
                 </ul>
               </div>
             </div>
