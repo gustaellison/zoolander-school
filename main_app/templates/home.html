@@ -49,7 +49,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for assignment in assignments %}
+                        {% for assignment in student.assignments.all %}
                             <tr>
                                 <td>{{ assignment.name }}</td>
                                 <td>{{ assignment.teacher }}</td>
@@ -70,7 +70,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for classroom in classrooms %}
+                        {% for classroom in student.classroom.all %}
                             <tr>
                                 <td>{{ classroom.name }}</td>
                                 <td>{{ classroom.schedule }}</td>
@@ -82,9 +82,9 @@
         </div>
     </div>
 </div>
-<div class="text-center m-4">
+<div class="text-center m-4"><br><br>
     <h4>Need Help?</h4>
-    <p>Click <a href='{% url "help_index" %}'>here</a> to access our FAQs about the site!</p>
+    <p>Click <a href='{% url "help_index" %}'>here</a> to access our FAQs!</p>
 </div><br><br><br><br>
 
 {% endblock %}

@@ -31,6 +31,14 @@ class GradesView(View):
         overall_gpa = calculate_overall_gpa(students)  # Implement a function to calculate overall GPA
 
         return render(request, 'grades_overview.html', {'students': students, 'overall_gpa': overall_gpa})
+    
+class MyGradesView(View):
+   def get(self, request, student_id, *args, **kwargs):
+      student = get_object_or_404(Student, id=student_id)
+      assignments = Assignment.objects.filter(student=student)
+      grades = Grade.objects.filter(student=student)
+
+      return render(request, 'my_grade.html', {'student': student, 'assignments': assignments, 'grades': grades})
 
 class StudentGradesView(View):
     def get(self, request, student_id, *args, **kwargs):
@@ -52,6 +60,7 @@ def home_index(request):
 def meeting_index(request):
   return render(request, 'meeting.html')
 
+@login_required
 def add_comment(request, announcement_id):
   form = CommentForm(request.POST)
   if form.is_valid():
@@ -74,6 +83,7 @@ class CommentFormView(FormView):
     context['announcement_id'] = announcement_id
     return context
 
+@login_required
 def add_announcement(request, classroom_id):
   form = AnnouncementForm(request.POST)
   if form.is_valid():
@@ -96,7 +106,7 @@ class AnnouncementFormView(FormView):
     context['classroom_id'] = classroom_id
     return context
   
-
+@login_required
 def add_profile(request, classroom_id):
   form = TeacherForm(request.POST)
   if form.is_valid():
