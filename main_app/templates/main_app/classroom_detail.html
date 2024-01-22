@@ -33,6 +33,8 @@
 
       <div class="tab-content mt-3">
         <div class="tab-pane fade show active" id="tab-content-1">
+
+
           <h4>Announcements</h4>
           <div>
             <a href="/classrooms/{{ classroom.id }}/announcement/create/">Add Announcement</a>
@@ -55,6 +57,8 @@
               <p>{{ comment.description }}</p>
             {% endfor %}
           {% endfor %}
+
+          
         </div>
         </div>
 
@@ -65,10 +69,10 @@
 
         <div class="tab-pane fade" id="tab-content-3">
           <h4>Teacher Profile</h4>
-          {% for profile in classroom.profile_set.all %}
-            <p>{{ profile.title }}</p>
-            <p>{{ profile.created_at }}</p>
-            <p>{{ profile.description }}</p>
+          {% for teacher in classroom.teachers.all %}
+            <p>{{ teacher.name }}</p>
+            <p>{{ teacher.created_at }}</p>
+            <p>{{ teacher.email }}</p>
             <a href="/classrooms/{{ classroom.id }}/profile/delete/">Delete Profile</a>
             <a href="/classrooms/{{ classroom.id }}/{{ profile.id }}/edit/">Edit Profile</a>
           {% endfor %}
@@ -112,7 +116,7 @@
           </div>
       </div>
 
-      <div class="card-action">
+      <div class="card">
         <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>
         <a href="{% url 'classroom_delete' classroom.id %}">Delete Class</a><br><br><br>
       </div>

@@ -52,11 +52,6 @@
                       <a class="nav-link text-white" aria-current="page" href="{% url 'grades_view' %}">Student Grades</a>
                     </li> 
                       {% endif %}
-                    {% if user.student %}
-                    <li class="nav-item">
-                      <a class="nav-link text-white" aria-current="page" href="{% url 'grades_view' %}">Student Grades</a>
-                    </li>
-                    {% endif %}
                     <li class="nav-item">
                       <a class="nav-link text-white" aria-current="page" href="/meeting">Zoom</a>
                     </li> 
@@ -76,7 +71,7 @@
                   <li class="nav-item mx-2">
                     <form method="post" action="{% url 'login' %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn-flat white-text">Log In</button>
+                      <button type="submit" class="btn-flat bg-transparent white-text">Log In</button>
                     </form>
                   </li>
                   {% endif %}
