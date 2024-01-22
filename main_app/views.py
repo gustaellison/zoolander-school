@@ -1,3 +1,5 @@
+from collections import UserList
+from django.db import IntegrityError
 from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -114,13 +116,24 @@ def student_index(request):
     students = Student.objects.filter(user=request.user)
     return render(request, 'students/index.html', {'students': students})
 
-def help_index(request):
-  return render(request, 'help/index.html')
-
 @login_required
 def student_detail(request, student_id):
     student = Student.objects.get(id=student_id)
     return render(request, 'students/detail.html', {'student': student})
+
+@login_required
+def teacher_index(request):
+    teachers = Teacher.objects.filter(user=request.user)
+    return render(request, 'teachers/index.html', {'teachers': teachers})
+
+def help_index(request):
+  return render(request, 'help/index.html')
+
+@login_required
+def teacher_detail(request, teacher_id):
+    teacher = Teacher.objects.get(id=teacher_id)
+    return render(request, 'teachers/detail.html', {'teacher': teacher})
+
 
 def signup(request):
   error_message = ''
@@ -152,9 +165,11 @@ class StudentCreate(LoginRequiredMixin,CreateView):
 
     def form_valid(self, form):
     # Assign the logged in user (self.request.user)
-      form.instance.user = self.request.user  # form.instance is the cat
+      form.instance.user = self.request.user  
     # Let the CreateView do its job as usual
       return super().form_valid(form)
+    
+
     
 @login_required    
 def create_assignment(request):
@@ -197,6 +212,16 @@ class StudentUpdate(LoginRequiredMixin, UpdateView):
 class StudentDelete(DeleteView):
   model = Student
   success_url = '/students'
+  
+class TeacherUpdate(LoginRequiredMixin, UpdateView):
+  model = Teacher
+  fields = '__all__'
+
+  def form_valid(self, form):
+    form.instance.user = self.request.user
+    return super().form_valid(form)
+
+
   
 class ClassroomDetail(DetailView):
   model = Classroom
