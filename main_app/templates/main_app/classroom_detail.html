@@ -39,6 +39,8 @@
         
         <!-- TAB 1 -->
         <div class="tab-pane fade show active" id="tab-content-1">
+
+
           <h4>Announcements</h4>
           <div>
             <a href="/classrooms/{{ classroom.id }}/announcement/create/">Add Announcement</a>
@@ -48,12 +50,21 @@
             <p>{{ announcement.title }}</p>
             <p>{{ announcement.created_at }}</p>
             <p>{{ announcement.description }}</p>
-            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a>
-            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a>
+            <form method="post" action="{% url 'announcement_delete' classroom_id=classroom.id title=announcement.title %}">
+              {% csrf_token %}
+              <button type="submit">Delete Announcement</button>
+            </form>
+            <form method="post" action="{% url 'announcement_update' classroom_id=classroom.id title=announcement.title %}">
+              {% csrf_token %}
+              <button type="submit">Edit Announcement</button>
+            </form>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/comment/create/">Comment</a>
             {% for comment in announcement.comment_set.all %}
               <p>{{ comment.description }}</p>
             {% endfor %}
           {% endfor %}
+
+          
         </div>
     
         <!-- TAB 2 -->
@@ -65,10 +76,10 @@
         <!-- TAB 3 -->
         <div class="tab-pane fade" id="tab-content-3">
           <h4>Teacher Profile</h4>
-          {% for profile in classroom.profile_set.all %}
-            <p>{{ profile.title }}</p>
-            <p>{{ profile.created_at }}</p>
-            <p>{{ profile.description }}</p>
+          {% for teacher in classroom.teachers.all %}
+            <p>{{ teacher.name }}</p>
+            <p>{{ teacher.created_at }}</p>
+            <p>{{ teacher.email }}</p>
             <a href="/classrooms/{{ classroom.id }}/profile/delete/">Delete Profile</a>
             <a href="/classrooms/{{ classroom.id }}/{{ profile.id }}/edit/">Edit Profile</a>
           {% endfor %}
@@ -80,15 +91,40 @@
           <!-- TAB 4 -->
         <div class="tab-pane fade" id="tab-content-4">
             <h4>Students</h4>
-            {% for student in classroom.students_set.all %}
-              <p>{{ student.name }}</p>
-            {% endfor %}
-        </div>
-      
+            <table class="table">
+              <thread>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">GPA</th>
+                <th scope="col">Email</th>
+                <th scope="col">Image</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Address</th>
+                <th scope="col">Parent Contact</th>
+              </tr>
+              </thread>
+              {% for student in classroom.students.all %}
+              <tbody>
+                <tr>
+                  <td><a href=" /students/{{ student.id }}">
+                    {{ student.name }}
+                  </a></td>
+                  <td>{{ student.gpa }}</td>
+                  <td>{{ student.email }}</td>
+                  <td>{{ student.image }}</td>
+                  <td>{{ student.grade }}</td>
+                  <td>{{ student.address }}</td>
+                  <td>{{ student.parents }}</td>
+                  {% endfor %}
+                  </tr>
+                </tbody>
+          </table>
+                
+          </div>
       </div>
       <!-- END OF TABS -->
 
-      <div class="card-action">
+      <div class="card">
         <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>
         <a href="{% url 'classroom_delete' classroom.id %}">Delete Class</a><br><br><br>
       </div>

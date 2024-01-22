@@ -83,7 +83,10 @@ WSGI_APPLICATION = 'zoolander.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'zoolander'  # Your PostgreSQL username      
+        'NAME': 'zoolander',  # Your PostgreSQL username    
+        'PASSWORD': 'chr0me',  # Your PostgreSQL password
+        'HOST': 'localhost',  # Set the host to the location of your PostgreSQL server
+        'PORT': '5432',  # Set the port to the PostgreSQL port  
     }
 }
 

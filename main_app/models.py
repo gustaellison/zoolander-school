@@ -119,7 +119,6 @@ class Comment(models.Model):
     class Meta: 
         ordering = ['-created_at']
 
-
 class Photo(models.Model):
     url = models.CharField(max_length=200)
     # use generic relations to allow a Photo to belong to either a Teacher or a Student

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete
+from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete, AnnouncementUpdate
 
 urlpatterns = [
     path('', views.home_index, name='home_index'),
@@ -18,8 +18,9 @@ urlpatterns = [
     path('add_announcement/<int:classroom_id>/', views.add_announcement, name='add_announcement'),
     path('classrooms/<int:classroom_id>/profile/create/', views.TeacherFormView.as_view(), name='teacher_form'),
     path('add_profile/<int:classroom_id>/', views.add_profile, name='add_profile'),
-    path('classrooms/<int:classroom_id>/announcement/delete/', AnnouncementDelete.as_view(), name='announcement_delete'),
-    path('classrooms/<int:classroom_id>/<int:announcement_id>/create/', views.CommentFormView.as_view(), name='comment_form'),
+    path('classrooms/<int:classroom_id>/<str:title>/announcement/delete/', AnnouncementDelete.as_view(), name='announcement_delete'),
+    path('classrooms/<int:classroom_id>/<str:title>/announcement/update/', AnnouncementUpdate.as_view(), name='announcement_update'),
+    path('classrooms/<int:classroom_id>/<int:announcement_id>/comment/create/', views.CommentFormView.as_view(), name='comment_form'),
     path('classrooms/<int:classroom_id>/<int:announcement_id>/', views.add_comment, name='add_comment'),
     path('classrooms/', views.ClassroomList.as_view(), name='classrooms_index'),
     path('classrooms/<int:pk>/', views.ClassroomDetail.as_view(), name='classroom_detail'),
