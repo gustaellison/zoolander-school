@@ -15,3 +15,9 @@
 
 path('teachers/create/', views.TeacherCreate.as_view(), name='teacher_create'),
 path('teachers/<int:pk>/delete/', views.TeacherDelete.as_view(), name='teacher_delete'),
+
+
+,  # Your PostgreSQL username
+        'PASSWORD': 'chr0me',  # Your PostgreSQL password
+        'HOST': 'localhost',  # Set the host to the location of your PostgreSQL server
+        'PORT': '5432',  # Set the port to the PostgreSQL port
