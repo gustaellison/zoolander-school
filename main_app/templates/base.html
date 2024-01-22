@@ -52,11 +52,6 @@
                       <a class="nav-link text-white" aria-current="page" href="{% url 'grades_view' %}">Student Grades</a>
                     </li> 
                       {% endif %}
-                    {% if user.student %}
-                    <li class="nav-item">
-                      <a class="nav-link text-white" aria-current="page" href="{% url 'grades_view' %}">Student Grades</a>
-                    </li>
-                    {% endif %}
                     <li class="nav-item">
                       <a class="nav-link text-white" aria-current="page" href="/meeting">Zoom</a>
                     </li> 
