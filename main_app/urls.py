@@ -33,4 +33,6 @@ urlpatterns = [
     path('assignment/<int:pk>/delete/', AssignmentDelete.as_view(), name='assignment_confirm_delete'),
     path('help/', views.help_index, name='help_index'),
     path('meeting/', views.meeting_index, name='meeting_index'),
+    path('teachers/<int:teacher_id>/add_photo/', views.add_photo, {'model_type': 'teacher'}, name='add_teacher_photo'),
+    path('students/<int:student_id>/add_photo/', views.add_photo, {'model_type': 'student'}, name='add_student_photo'),
 ]

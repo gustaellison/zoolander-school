@@ -3,6 +3,8 @@ from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
 from django import forms
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 
 # Create your models here.
@@ -116,3 +118,14 @@ class Comment(models.Model):
 
     class Meta: 
         ordering = ['-created_at']
+
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    # use generic relations to allow a Photo to belong to either a Teacher or a Student
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return f"Photo for {self.content_type} with id {self.object_id} @{self.url}"
