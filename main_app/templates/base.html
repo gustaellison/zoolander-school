@@ -35,7 +35,7 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                  <li class="nav-item">
+                  <li class="nav-item mx-2">
                     <form method="post" action="/">
                       {% csrf_token %}
                       <button type="submit" class="btn-flat white-text">Home</button>
@@ -43,8 +43,8 @@
                   </li>
                   <li class="nav-item dropdown">
                     {% if user.is_authenticated %}
-                  </li>
                       {% if user.teacher %}
+
                       <li class="nav-item">
                         <form method="get" action="/classrooms/">
                           {% csrf_token %}
@@ -66,45 +66,55 @@
                           {% csrf_token %}
                           <button type="submit" class="btn-flat white-text">Student Grades</button>
                         </form>
+
+
                       </li>
                       {% endif %}
-                      {% if user.student %}
-                      <li class="nav-item">
+                    {% if user.student %}
+                      <li class="nav-item mx-2">
                         <form method="get" action="{% url 'grades_view' %}">
                           {% csrf_token %}
                           <button type="submit" class="btn-flat white-text">Grades</button>
                         </form>
                       </li>
-                      {% endif %}
-                  <li class="nav-item">
+                    {% endif %}
+                  <li class="nav-item mx-2">
                     <form method="get" action="/meeting/">
                       {% csrf_token %}
                       <button type="submit" class="btn-flat white-text">Zoom</button>
                     </form>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item mx-2">
                     <form method="post" action="{% url 'logout' %}">
                       {% csrf_token %}
                       <button type="submit" class="btn-flat white-text">Logout</button>
                     </form>
                   </li>
                   {% else %}
-                  <li class="nav-item">
+                  <li class="nav-item mx-2">
                     <form method="post" action="{% url 'signup' %}">
                       {% csrf_token %}
                       <button type="submit" class="btn-flat white-text">Sign Up</button>
                     </form>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item mx-2">
                     <form method="post" action="{% url 'login' %}">
                       {% csrf_token %}
                       <button type="submit" class="btn-flat white-text">Log In</button>
                     </form>
                   </li>
                   {% endif %}
-                  <li class="nav-item">
+                  <li class="nav-item mx-2">
                     <button id="toggle" type="button" class="btn" data-bs-toggle="button">Light/Dark Mode</button>
                   </li>
+                  <nav class="navbar bg-body-tertiary">
+                    <div class="container-fluid">
+                      <a class="navbar-brand">
+                        <img src="https://i.postimg.cc/ydr79x4B/download.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                        Zoolander School
+                      </a>
+                    </div>
+                  </nav>
                 </ul>
               </div>
             </div>

@@ -3,16 +3,14 @@
 
 <h1>Classroom Detail</h1>
 
-
-<!-- Classroom Details -->
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-md-8">
-      <!-- Classroom Information -->
-      <h2>{{ classroom.name }}</h2>
-      <p>{{ classroom.description }}</p>
-      <img src="{{ classroom.image }}" alt="{{ classroom.name }}" class="img-fluid">
-      <p>Zoom Link: {{ classroom.zoom_link }}</p>
+<div class="carb mb-3">
+  <img src="{{ classroom.image }}" class='card-img-top' alt="No Image Found">
+  <div class="card-body">
+    <h4 class="card-title">{{ classroom.name }}</h4>
+    <p class="card-text">{{ classroom.description }}</p>
+    <p class="card-text"><small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+  </div>
+</div>
       {% if user.teacher %}
         <form method="post" action="{% url 'classroom_detail' pk=classroom.id %}">
             {% csrf_token %}
@@ -21,81 +19,65 @@
         </form>
       {% endif %}
 
-
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">
-          <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#tab-content-1">Announcements</a>
-        </li><br><br><br>
-        <!-- Add more tabs as needed -->
+          <a class="nav-link active" data-bs-toggle="tab" href="#tab-content-1">Announcements</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="tab" href="#tab-content-2">Schedule</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="tab" href="#tab-content-3">Meet the Teacher!</a>
+        </li>
       </ul>
-      <div>
-        <a href="/classrooms/{{ classroom.id }}/announcement/create/">Add Announcement</a>
-      </div>
+
       <div class="tab-content mt-3">
-        <!-- Tab 1 Content -->
         <div class="tab-pane fade show active" id="tab-content-1">
           <h4>Announcements</h4>
+          <div>
+            <a href="/classrooms/{{ classroom.id }}/announcement/create/">Add Announcement</a>
+          </div>
+          
           {% for announcement in classroom.announcement_set.all %}
             <p>{{ announcement.title }}</p>
             <p>{{ announcement.created_at }}</p>
             <p>{{ announcement.description }}</p>
-            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a><br>
-            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a><br><br><br>
+            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a>
             {% for comment in announcement.comment_set.all %}
               <p>{{ comment.description }}</p>
             {% endfor %}
           {% endfor %}
         </div>
-        <!-- Add more tab contents as needed -->
-      </div>
-      <!-- Tab Navigation -->
-      <ul class="nav nav-tabs" id="myTabs">
-        <li class="nav-item">
-          <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#tab-content-1">Schedule</a>
-        </li>
-        <!-- Add more tabs as needed -->
-      </ul>
+        </div>
 
-      <!-- Tab Content -->
-      <div class="tab-content mt-3">
-        <!-- Tab 1 Content -->
-        <div class="tab-pane fade show active" id="tab-content-1">
+        <div class="tab-pane fade" id="tab-content-2">
           <h4>Schedule</h4>
           <p>{{ classroom.schedule }}</p>
         </div>
-        <!-- Add more tab contents as needed -->
-      </div>
 
-      <ul class="nav nav-tabs" id="myTabs">
-        <li class="nav-item">
-          <a class="nav-link active" id="tab1" data-bs-toggle="tab" href="#tab-content-1">Meet the Teacher!</a>
-        </li><br><br><br>
-        <!-- Add more tabs as needed -->
-      </ul>
-      <div>
-        <a href="/classrooms/{{ classroom.id }}/profile/create/">Add Teacher Profile</a>
-      </div>
-      <div class="tab-content mt-3">
-        <div class="tab-pane fade show active" id="tab-content-1">
-          <h4>Teacher Profile:</h4>
+        <div class="tab-pane fade" id="tab-content-3">
+          <h4>Teacher Profile</h4>
           {% for profile in classroom.profile_set.all %}
-            <p>{{ announcement.title }}</p>
-            <p>{{ announcement.created_at }}</p>
-            <p>{{ announcement.description }}</p>
-            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a><br>
-            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a><br><br><br>
-            {% for comment in announcement.comment_set.all %}
-              <p>{{ comment.description }}</p>
-            {% endfor %}
+            <p>{{ profile.title }}</p>
+            <p>{{ profile.created_at }}</p>
+            <p>{{ profile.description }}</p>
+            <a href="/classrooms/{{ classroom.id }}/profile/delete/">Delete Profile</a>
+            <a href="/classrooms/{{ classroom.id }}/{{ profile.id }}/edit/">Edit Profile</a>
           {% endfor %}
+          <div>
+            <a href="/classrooms/{{ classroom.id }}/profile/create/">Add Teacher Profile</a>
+          </div>
         </div>
-
-        <div class="card-action">
-          <a href="{% url 'classroom_update' classroom.id %}">Edit</a>
-          <a href="{% url 'classroom_delete' classroom.id %}">Delete</a>
       </div>
-   </div>
+
+      <div class="card-action">
+        <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>
+        <a href="{% url 'classroom_delete' classroom.id %}">Delete Class</a><br><br><br>
+      </div>
+    </div>
   </div>
 </div>
+
 
 {% endblock %}

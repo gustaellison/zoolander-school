@@ -3,16 +3,28 @@
 
 
 <h1>Zoom Meeting Links:</h1>
-{% if classrooms %}
-    <ul>
-        {% for classroom in classrooms %}
-            <li>
-                {{ classroom.name }} - Zoom Link: <a href="{{ classroom.zoom_link }}" target="_blank">{{ classroom.zoom_link }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No Zoom classes available.</p>
-{% endif %}
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope='col'>#</th>
+            <th scope="col">Class</th>
+            <th scope="col">Zoom Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if classrooms %}
+            {% for classroom in classrooms %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ classroom.name }}</td>
+                    <td><a href='{{ classroom.zoom_link }}' target='_blank'>{{ classroom.zoom_link }}</a></td>
+                </tr>
+            {% endfor %}
+        {% else %}
+                <p>No Zoom classes available.</p>
+        {% endif %}
+    </tbody>
+</table>
+
 
 {% endblock %}
