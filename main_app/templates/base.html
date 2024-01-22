@@ -44,30 +44,30 @@
                   <li class="nav-item dropdown">
                     {% if user.is_authenticated %}
                       {% if user.teacher %}
-                        <li class="nav-item mx-2">
-                          <form method="get" action="/classrooms/">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-flat white-text">Classes</button>
-                          </form>
-                        </li>
-                        <li class="nav-item mx-2">
-                          <form method="post" action="/students/">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-flat white-text">Students</button>
-                          </form>
-                        </li>
-                        <li class="nav-item mx-2">
-                          <form method="post" action="/create_assignment/">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-flat white-text">Assignment</button>
-                          </form>
-                        </li>
-                        <li class="nav-item mx-2"></li>
-                          <form method="get" action="{% url 'grades_view' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-flat white-text">Student Grades</button>
-                          </form>
-                        </li>
+
+                      <li class="nav-item">
+                        <form method="get" action="/classrooms/">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-flat white-text">Classes</button>
+                        </form>
+                        <form method="post" action="/students/">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-flat white-text">Students</button>
+                        </form>
+                        <form method="post" action="/teachers/">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-flat white-text">Teachers</button>
+                        </form>
+                        <form method="post" action="/create_assignment/">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-flat white-text">Assignment</button>
+                        </form>
+                        <form method="get" action="{% url 'grades_view' %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-flat white-text">Student Grades</button>
+                        </form>
+
+
                       </li>
                       {% endif %}
                     {% if user.student %}

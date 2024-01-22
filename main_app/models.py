@@ -8,7 +8,7 @@ from django import forms
 # Create your models here.
 class Student(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=150)
+    email = models.CharField(max_length=150)
     image = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     gpa = models.IntegerField(default=0)
@@ -16,6 +16,8 @@ class Student(models.Model):
     address = models.CharField(max_length=300, default='None Listed')
     parents = models.CharField(max_length=200, default='None Listed')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
+    classroom = models.ManyToManyField('Classroom', related_name='classroom_relation', symmetrical=False)
+
 
     def __str__(self):
         return self.name
@@ -30,7 +32,10 @@ class Teacher(models.Model):
     image= models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+    students = models.ManyToManyField(Student)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', default=None)
+    classrooms = models.ManyToManyField('Classroom', related_name='classrooms_relation', symmetrical=False)
+
 
     def __str__(self):
         return self.name
@@ -38,11 +43,8 @@ class Teacher(models.Model):
     def get_absolute_url(self):
         return reverse('detail', kwargs={'teacher_id': self.id})    
     
-    def __str__(self):
-        return self.name
-    
     def get_absolute_url(self):
-        return reverse('student_index')    
+        return reverse('teacher_index')    
     
 class Classroom(models.Model):
     name = models.CharField(max_length=100)
@@ -51,9 +53,12 @@ class Classroom(models.Model):
     schedule = models.DateField('Schedule')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField(Student)
+    # students = models.ManyToManyField(Student)
+    students = models.ManyToManyField('Student', related_name='student_relation', symmetrical=False)
     # teacher = models.CharField(max_length=100, default="no teacher")
-    teachers = models.ManyToManyField(Teacher)
+    # teachers = models.ManyToManyField(Teacher)
+    teachers = models.ManyToManyField('Teacher', related_name='teacher_relation', symmetrical=False)
+
     zoom_link = models.URLField(blank=True, null=True)
     
     def __str__(self):

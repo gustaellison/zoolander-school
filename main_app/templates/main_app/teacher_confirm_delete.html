@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Delete Teacher?</h1>
+<h4>Are you sure you want to delete this teacher?</h4>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Yes - Delete!">
+    <a href="{% url 'student_detail' student.id %}">Cancel</a>
+</form>
+
+{% endblock %}
+
+
+path('teachers/create/', views.TeacherCreate.as_view(), name='teacher_create'),
+path('teachers/<int:pk>/delete/', views.TeacherDelete.as_view(), name='teacher_delete'),
+
+
+,  # Your PostgreSQL username
+        'PASSWORD': 'chr0me',  # Your PostgreSQL password
+        'HOST': 'localhost',  # Set the host to the location of your PostgreSQL server
+        'PORT': '5432',  # Set the port to the PostgreSQL port
