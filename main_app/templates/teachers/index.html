@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>Teacher List</h1>
+    {% for teacher in teachers %}
+        <div>
+            <a href="{% url 'teacher_detail' teacher.id %}">
+                <p>Name: {{ teacher.name }}</p>
+            </a>
+        </div>
+    {% endfor %}
+    <a class="nav-link" href="/">Back to Dashboard</a>
+</body>
+</html>
+
+{% endblock %}

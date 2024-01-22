@@ -42,7 +42,7 @@ class Teacher(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('student_index')    
+        return reverse('teacher_index')    
     
 class Classroom(models.Model):
     name = models.CharField(max_length=100)

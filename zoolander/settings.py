@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'zoolander.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'zoolander'
+        'NAME': 'zoolander'  # Your PostgreSQL username
     }
 }
 
