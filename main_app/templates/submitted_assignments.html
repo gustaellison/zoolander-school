@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Submitted Assignments</h1>
+
+  {% for assignment in submitted_assignments %}
+    <h2>{{ assignment.name }}</h2>
+    <p>Submitted File: <a href="{% url 'download_file' assignment.id %}" target="_blank">{{ assignment.submitted_file.name }}</a></p>
+  {% endfor %}
+{% endblock %}

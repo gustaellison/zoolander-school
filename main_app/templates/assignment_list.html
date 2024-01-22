@@ -1,34 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <h1>Assignment Dashboard</h1>
+<h1>Assignment Dashboard</h1>
 
-  {% if assignments %}
-    <div class="assignment-list">
-      {% for assignment in assignments %}
-        <div class="assignment-item">
-          <p>
-            <strong>{{ assignment.name }}</strong><br>
-            Assigned to: {{ assignment.student.name }}<br>
-            Due Date: {{ assignment.due_date }}
-            {% if user.teacher %}
-              - <a href="{% url 'assignment_confirm_delete' assignment.id %}">Delete</a>
-            {% endif %}
-          </p>
-          {% if assignment.google_drive_link %}
-            <p class="google-drive-link">
-              Google Drive: <a href="{{ assignment.google_drive_link }}" target="_blank">{{ assignment.google_drive_link }}</a>
-            </p>
+{% if assignments %}
+  <div class="assignment-list">
+    {% for assignment in assignments %}
+      <div class="assignment-item">
+        <p>
+          <strong>{{ assignment.name }}</strong><br>
+          Assigned to: {{ assignment.student.name }}<br>
+          Due Date: {{ assignment.due_date }}
+          {% if user.teacher %}
+            - <a href="{% url 'assignment_confirm_delete' assignment.id %}">Delete</a>
           {% endif %}
-          {% if user.student %}
-                    <a href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
-                {% endif %}
-        </div>
-      {% endfor %}
-    </div>
-    <a class="nav-link" href="/">Back to Dashboard</a>
-  {% else %}
-    <p>No assignments available.</p>
-  {% endif %}
+        </p>
+        {% if assignment.google_drive_link %}
+          <p class="google-drive-link">
+            Google Drive: <a href="{{ assignment.google_drive_link }}" target="_blank">{{ assignment.google_drive_link }}</a>
+          </p>
+        {% endif %}
+        {% if assignment.submitted_by_student %}
+          <p>
+            <strong>Assignment Submitted</strong><br>
+            Submitted File: {{ assignment.submitted_file.name }}<br>
+            <a href="{% url 'download_file' assignment.id %}">Download Submitted File</a>
+          </p>
+        {% else %}
+          <a href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <a class="nav-link" href="/">Back to Dashboard</a>
+{% else %}
+  <p>No assignments available.</p>
+{% endif %}
 
 {% endblock %}

@@ -11,10 +11,19 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import  Assignment, Grade
-from .models import AssignmentForm
+from .models import AssignmentForm, AssignmentSubmission
 from .forms import AnnouncementForm, CommentForm, TeacherForm
 from .models import ZoomLinkForm
 from .models import AssignmentSubmissionForm
+from django.http import HttpResponseForbidden
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404
+from django.conf import settings
+import os
+
 # Create your views here.
 
 
@@ -258,20 +267,59 @@ def meeting_index(request):
     classrooms = Classroom.objects.all()
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
 
+from django.shortcuts import get_object_or_404
+
+from django.shortcuts import get_object_or_404
+
 def submit_assignment(request, assignment_id):
-    assignment = get_object_or_404(Assignment, id=assignment_id, classroom__students=request.user.student)
+    # Check if the user has a related student profile
+    if hasattr(request.user, 'student'):
+        student = request.user.student
 
-    if request.method == 'POST':
-        form = AssignmentSubmissionForm(request.POST, request.FILES)
-        if form.is_valid():
-            assignment.submitted_by_student = True
-            assignment.submitted_file = form.cleaned_data['submitted_file']
-            assignment.save()
-            return redirect('assignment_list')  # Redirect to the list of assignments
+        assignment = get_object_or_404(Assignment, id=assignment_id, classroom__students=student)
+
+        if request.method == 'POST':
+            form = AssignmentSubmissionForm(request.POST, request.FILES)
+            if form.is_valid():
+                assignment.submitted_by_student = True
+                assignment.submitted_file = form.cleaned_data['submitted_file']
+                assignment.save()
+                return redirect('assignment_list')  # Redirect to the list of assignments
+        else:
+            form = AssignmentSubmissionForm()
+
+        return render(request, 'submit_assignment.html', {'form': form})
     else:
-        form = AssignmentSubmissionForm()
+        # Handle the case where the user has no related student profile (redirect or display an error)
+        # You can customize this based on your application's logic
+        return HttpResponseForbidden("You don't have a student profile.")
 
-    return render(request, 'submit_assignment.html', {'assignment': assignment, 'form': form})
+
+
+
+def submitted_assignments_view(request):
+    # Fetch all submitted assignments
+    submitted_assignments = Assignment.objects.filter(submitted_by_student=True)
+
+    return render(request, 'submitted_assignments.html', {'submitted_assignments': submitted_assignments})
+
+
+def download_file(request, assignment_id):
+    # Check if the user has a related student
+    if hasattr(request.user, 'student'):
+        student = request.user.student
+
+        submission = get_object_or_404(AssignmentSubmission, assignment_id=assignment_id, student=student)
+
+        file_path = submission.submitted_file.path
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='application/octet-stream')
+            response['Content-Disposition'] = f'attachment; filename="{submission.submitted_file.name}"'
+            return response
+    else:
+        # Handle the case where the user has no related student (redirect or display an error)
+        # You can customize this based on your application's logic
+        return HttpResponseForbidden("You don't have a student profile.")
 
 # class ClassroomDetail(FormView):
 #     template_name = 'classroom_detail.html'

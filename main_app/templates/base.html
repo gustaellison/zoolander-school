@@ -62,6 +62,9 @@
                           {% csrf_token %}
                           <button type="submit" class="btn-flat white-text">Assignment</button>
                         </form>
+                        <li class="nav-item mx-2">
+                          <a class="btn-flat white-text" href="{% url 'submitted_assignments' %}">Submitted Assignments</a>
+                      </li>
                         <form method="get" action="{% url 'grades_view' %}">
                           {% csrf_token %}
                           <button type="submit" class="btn-flat white-text">Student Grades</button>

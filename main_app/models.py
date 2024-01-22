@@ -124,3 +124,11 @@ class Comment(models.Model):
 
     class Meta: 
         ordering = ['-created_at']
+
+class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey(Assignment, related_name='submissions', on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    submitted_file = models.FileField(upload_to='submissions/')       
+
+    def __str__(self):
+        return f"{self.student.name}'s submission for {self.assignment.name}" 
