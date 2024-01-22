@@ -69,11 +69,19 @@ class Assignment(models.Model):
     name = models.CharField(max_length=255)
     google_drive_link = models.URLField(blank=True, null=True)
     due_date = models.DateField(blank=True, null=True)
+    submitted_by_student = models.BooleanField(default=False)
+    submitted_file = models.FileField(upload_to='assignment_submissions/', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 class ZoomLinkForm(forms.ModelForm):
     class Meta:
         model = Classroom
-        fields = ['zoom_link']    
+        fields = ['zoom_link']   
+
+class AssignmentSubmissionForm(forms.Form):
+    submitted_file = forms.FileField()         
 
 
 class Grade(models.Model):

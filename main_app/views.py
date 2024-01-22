@@ -12,6 +12,7 @@ from .models import  Assignment, Grade
 from .models import AssignmentForm
 from .forms import AnnouncementForm, CommentForm, TeacherForm
 from .models import ZoomLinkForm
+from .models import AssignmentSubmissionForm
 # Create your views here.
 
 
@@ -231,6 +232,21 @@ class AnnouncementDelete(DeleteView):
 def meeting_index(request):
     classrooms = Classroom.objects.all()
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
+
+def submit_assignment(request, assignment_id):
+    assignment = get_object_or_404(Assignment, id=assignment_id, classroom__students=request.user.student)
+
+    if request.method == 'POST':
+        form = AssignmentSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            assignment.submitted_by_student = True
+            assignment.submitted_file = form.cleaned_data['submitted_file']
+            assignment.save()
+            return redirect('assignment_list')  # Redirect to the list of assignments
+    else:
+        form = AssignmentSubmissionForm()
+
+    return render(request, 'submit_assignment.html', {'assignment': assignment, 'form': form})
 
 # class ClassroomDetail(FormView):
 #     template_name = 'classroom_detail.html'

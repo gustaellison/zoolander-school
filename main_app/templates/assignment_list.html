@@ -1,23 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Teacher Dashboard</h1>
+  <h1>Assignment Dashboard</h1>
 
-{% if assignments %}
-    <ul>
-        {% for assignment in assignments %}
-            <li>
-                {{ assignment.name }} - Assigned to: {{ assignment.student.name }} - Due Date: {{ assignment.due_date }}
-                <a href="{% url 'assignment_confirm_delete' assignment.id %}">Delete</a>
-                {% if assignment.google_drive_link %}
-                    - Google Drive: <a href="{{ assignment.google_drive_link }}" target="_blank">{{ assignment.google_drive_link }}</a>
+  {% if assignments %}
+    <div class="assignment-list">
+      {% for assignment in assignments %}
+        <div class="assignment-item">
+          <p>
+            <strong>{{ assignment.name }}</strong><br>
+            Assigned to: {{ assignment.student.name }}<br>
+            Due Date: {{ assignment.due_date }}
+            {% if user.teacher %}
+              - <a href="{% url 'assignment_confirm_delete' assignment.id %}">Delete</a>
+            {% endif %}
+          </p>
+          {% if assignment.google_drive_link %}
+            <p class="google-drive-link">
+              Google Drive: <a href="{{ assignment.google_drive_link }}" target="_blank">{{ assignment.google_drive_link }}</a>
+            </p>
+          {% endif %}
+          {% if user.student %}
+                    <a href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
                 {% endif %}
-            </li>
-        {% endfor %}
-        <a class="nav-link" href="/">Back to Dashboard</a>
-    </ul>
-{% else %}
+        </div>
+      {% endfor %}
+    </div>
+    <a class="nav-link" href="/">Back to Dashboard</a>
+  {% else %}
     <p>No assignments available.</p>
-{% endif %}
+  {% endif %}
 
 {% endblock %}

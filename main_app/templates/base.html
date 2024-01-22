@@ -77,6 +77,12 @@
                           <button type="submit" class="btn-flat white-text">Grades</button>
                         </form>
                       </li>
+                      <li class="nav-item mx-2">
+                        <form method="get" action="{% url 'assignment_list' %}">
+                           {% csrf_token %}
+                           <button type="submit" class="btn-flat white-text">Assignments</button>
+                        </form>
+                     </li>
                     {% endif %}
                   <li class="nav-item mx-2">
                     <form method="get" action="/meeting/">
