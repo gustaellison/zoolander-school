@@ -232,20 +232,20 @@ def meeting_index(request):
     classrooms = Classroom.objects.all()
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
 
-class ClassroomDetail(FormView):
-    template_name = 'classroom_detail.html'
-    form_class = ZoomLinkForm
+# class ClassroomDetail(FormView):
+#     template_name = 'classroom_detail.html'
+#     form_class = ZoomLinkForm
 
-    def form_valid(self, form):
-        classroom_id = self.kwargs['pk']
-        classroom = Classroom.objects.get(pk=classroom_id)
-        classroom.zoom_link = form.cleaned_data['zoom_link']
-        classroom.save()
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         classroom_id = self.kwargs['pk']
+#         classroom = Classroom.objects.get(pk=classroom_id)
+#         classroom.zoom_link = form.cleaned_data['zoom_link']
+#         classroom.save()
+#         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        classroom_id = self.kwargs.get('pk')
-        context['classroom'] = Classroom.objects.get(pk=classroom_id)
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         classroom_id = self.kwargs.get('pk')
+#         context['classroom'] = Classroom.objects.get(pk=classroom_id)
+#         return context
 
