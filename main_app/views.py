@@ -138,23 +138,23 @@ def teacher_detail(request, teacher_id):
 def signup(request):
   error_message = ''
   if request.method == 'POST':
-    # This is how to create a 'user' form object
-    # that includes the data from the browser
     form = UserCreationForm(request.POST)
     if form.is_valid():
-      # This will add the user to the database
       user = form.save()
       role = request.POST.get('role')
-      # This is how we log a user in via code
-      if role == "student":
-        student = Student.objects.create(user=user)
-      elif role == 'teacher':
-        teacher = Teacher.objects.create(user=user)
+      name = request.POST.get('name')
+      try:
+        if role == "student":
+          student = Student.objects.create(user=user, name=name)
+        elif role == 'teacher':
+          teacher = Teacher.objects.create(user=user, name=name)
+      except Exception as e:
+        print(f'Error creating {role} - {str(e)}')
       login(request, user)
+      print(request)
       return redirect('/')
     else:
       error_message = 'Invalid sign up - try again'
-  # A bad POST or a GET request, so render signup.html with an empty form
   form = UserCreationForm()
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
