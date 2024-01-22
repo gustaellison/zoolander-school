@@ -8,7 +8,7 @@ from django import forms
 # Create your models here.
 class Student(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=150)
+    email = models.CharField(max_length=150)
     image = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     gpa = models.IntegerField(default=0)
@@ -30,6 +30,7 @@ class Teacher(models.Model):
     image= models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+    students = models.ManyToManyField(Student)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', default=None)
 
     def __str__(self):
@@ -37,9 +38,6 @@ class Teacher(models.Model):
     
     def get_absolute_url(self):
         return reverse('detail', kwargs={'teacher_id': self.id})    
-    
-    def __str__(self):
-        return self.name
     
     def get_absolute_url(self):
         return reverse('student_index')    
