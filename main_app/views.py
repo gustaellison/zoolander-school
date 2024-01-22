@@ -10,10 +10,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from .models import  Assignment, Grade
+from .models import  Assignment, Grade, Student
 from .models import AssignmentForm
 from .forms import AnnouncementForm, CommentForm, TeacherForm
 from .models import ZoomLinkForm
+from django.http import Http404
 # Create your views here.
 
 
@@ -38,8 +39,8 @@ def calculate_overall_gpa(students):
     overall_gpa = total_gpa / len(students) if students else 0
     return overall_gpa
 
-def home_index(request, student_id):
-  return render(request, 'home.html')
+def home_index(request):
+    return render(request, 'home.html')
 
 def meeting_index(request):
   return render(request, 'meeting.html')
@@ -97,7 +98,7 @@ def add_profile(request, classroom_id):
     new_profile.save()
   return redirect('classroom_detail', pk=classroom_id)
 
-class TeacherFormView(FormView):
+class TeacherFormView(LoginRequiredMixin, FormView):
   template_name = 'profile_form.html'
   form_class = TeacherForm
   success_url = '/classrooms/'
@@ -246,7 +247,17 @@ class ClassroomCreate(LoginRequiredMixin, CreateView):
   
 class AnnouncementDelete(DeleteView):
   model = Announcement
-  success_url = '/classrooms'
+  success_url = '/classrooms/'
+
+  def get_object(self, queryset=None):
+        classroom_id = self.kwargs.get('classroom_id')
+        title = self.kwargs.get('title')  
+        return get_object_or_404(Announcement, classroom_id=classroom_id, title=title)
+  
+class AnnouncementUpdate(UpdateView):
+  model = Announcement
+  fields = ['title', 'description']
+  success_url = '/classrooms/'
 
   def get_object(self, queryset=None):
         classroom_id = self.kwargs.get('classroom_id')
@@ -256,21 +267,3 @@ class AnnouncementDelete(DeleteView):
 def meeting_index(request):
     classrooms = Classroom.objects.all()
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
-
-# class ClassroomDetail(FormView):
-#     template_name = 'classroom_detail.html'
-#     form_class = ZoomLinkForm
-
-#     def form_valid(self, form):
-#         classroom_id = self.kwargs['pk']
-#         classroom = Classroom.objects.get(pk=classroom_id)
-#         classroom.zoom_link = form.cleaned_data['zoom_link']
-#         classroom.save()
-#         return super().form_valid(form)
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         classroom_id = self.kwargs.get('pk')
-#         context['classroom'] = Classroom.objects.get(pk=classroom_id)
-#         return context
-
