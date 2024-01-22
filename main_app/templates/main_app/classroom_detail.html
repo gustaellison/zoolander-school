@@ -75,6 +75,40 @@
           <div>
             <a href="/classrooms/{{ classroom.id }}/profile/create/">Add Teacher Profile</a>
           </div>
+      </div>
+
+        <!-- TAB 4 -->
+      <div class="tab-pane fade" id="tab-content-4">
+          <h4>Students</h4>
+          <table class="table">
+            <thread>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">GPA</th>
+              <th scope="col">Email</th>
+              <th scope="col">Image</th>
+              <th scope="col">Grade</th>
+              <th scope="col">Address</th>
+              <th scope="col">Parent Contact</th>
+            </tr>
+            </thread>
+            {% for student in classroom.students.all %}
+            <tbody>
+              <tr>
+                <td><a href=" /students/{{ student.id }}">
+                  {{ student.name }}
+                </a></td>
+                <td>{{ student.gpa }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.image }}</td>
+                <td>{{ student.grade }}</td>
+                <td>{{ student.address }}</td>
+                <td>{{ student.parents }}</td>
+                {% endfor %}
+                </tr>
+              </tbody>
+        </table>
+              
         </div>
       </div>
 
