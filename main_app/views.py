@@ -38,8 +38,8 @@ def calculate_overall_gpa(students):
     overall_gpa = total_gpa / len(students) if students else 0
     return overall_gpa
 
-def home_index(request):
-    return render(request, 'home.html')
+def home_index(request, student_id):
+  return render(request, 'home.html')
 
 def meeting_index(request):
   return render(request, 'meeting.html')
