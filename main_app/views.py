@@ -97,7 +97,7 @@ def add_profile(request, classroom_id):
     new_profile.save()
   return redirect('classroom_detail', pk=classroom_id)
 
-class TeacherFormView(FormView):
+class TeacherFormView(LoginRequiredMixin, FormView):
   template_name = 'profile_form.html'
   form_class = TeacherForm
   success_url = '/classrooms/'
@@ -246,7 +246,17 @@ class ClassroomCreate(LoginRequiredMixin, CreateView):
   
 class AnnouncementDelete(DeleteView):
   model = Announcement
-  success_url = '/classrooms'
+  success_url = '/classrooms/'
+
+  def get_object(self, queryset=None):
+        classroom_id = self.kwargs.get('classroom_id')
+        title = self.kwargs.get('title')  
+        return get_object_or_404(Announcement, classroom_id=classroom_id, title=title)
+  
+class AnnouncementUpdate(UpdateView):
+  model = Announcement
+  fields = ['title', 'description']
+  success_url = '/classrooms/'
 
   def get_object(self, queryset=None):
         classroom_id = self.kwargs.get('classroom_id')

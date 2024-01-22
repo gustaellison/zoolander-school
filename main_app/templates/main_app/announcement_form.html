@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Create Teacher Profile</h1>
-    <form action="{% url 'add_profile' classroom_id %}" method="POST">
+    <h1>Update Announcement</h1>
+    <form action="" method="POST">
         {% csrf_token %}
         {{ form.errors }}
         <table>

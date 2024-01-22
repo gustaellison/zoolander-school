@@ -2,7 +2,7 @@
 {% block content %}
 
 <h1>Create New Announcement</h1>
-    <form action="{% url 'add_announcement' classroom.id %}" method="POST">
+    <form action="{% url 'add_announcement' classroom_id %}" method="POST">
         {% csrf_token %}
         {{ form.errors }}
         <table>

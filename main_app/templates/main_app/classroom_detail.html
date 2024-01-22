@@ -48,8 +48,15 @@
             <p>{{ announcement.title }}</p>
             <p>{{ announcement.created_at }}</p>
             <p>{{ announcement.description }}</p>
-            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a>
-            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a>
+            <form method="post" action="{% url 'announcement_delete' classroom_id=classroom.id title=announcement.title %}">
+              {% csrf_token %}
+              <button type="submit">Delete Announcement</button>
+            </form>
+            <form method="post" action="{% url 'announcement_update' classroom_id=classroom.id title=announcement.title %}">
+              {% csrf_token %}
+              <button type="submit">Edit Announcement</button>
+            </form>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/comment/create/">Comment</a>
             {% for comment in announcement.comment_set.all %}
               <p>{{ comment.description }}</p>
             {% endfor %}
