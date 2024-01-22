@@ -10,10 +10,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from .models import  Assignment, Grade
+from .models import  Assignment, Grade, Student
 from .models import AssignmentForm
 from .forms import AnnouncementForm, CommentForm, TeacherForm
 from .models import ZoomLinkForm
+from django.http import Http404
 # Create your views here.
 
 
