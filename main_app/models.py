@@ -16,6 +16,8 @@ class Student(models.Model):
     address = models.CharField(max_length=300, default='None Listed')
     parents = models.CharField(max_length=200, default='None Listed')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
+    classroom = models.ManyToManyField('Classroom', related_name='classroom_relation', symmetrical=False)
+
 
     def __str__(self):
         return self.name
@@ -31,6 +33,8 @@ class Teacher(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', default=None)
+    classrooms = models.ManyToManyField('Classroom', related_name='classrooms_relation', symmetrical=False)
+
 
     def __str__(self):
         return self.name
@@ -51,9 +55,12 @@ class Classroom(models.Model):
     schedule = models.DateField('Schedule')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    students = models.ManyToManyField(Student)
+    # students = models.ManyToManyField(Student)
+    students = models.ManyToManyField('Student', related_name='student_relation', symmetrical=False)
     # teacher = models.CharField(max_length=100, default="no teacher")
-    teachers = models.ManyToManyField(Teacher)
+    # teachers = models.ManyToManyField(Teacher)
+    teachers = models.ManyToManyField('Teacher', related_name='teacher_relation', symmetrical=False)
+
     zoom_link = models.URLField(blank=True, null=True)
     
     def __str__(self):
