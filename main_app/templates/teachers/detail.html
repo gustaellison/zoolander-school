@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Teacher Details</h1>
+
+<div>
+    <table>
+        <tr>
+            <th>Edit</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Image</th>
+        </tr>
+        <tr>
+            <td><a href="{% url 'teacher_update' teacher.id %}">Edit</a></td>
+            <td>{{ teacher.name }}</td>
+            <td>{{ teacher.email }}</td>
+            <td>{{ teacher.image }}</td>
+            <a class="nav-link" href="/">Back to Dashboard</a>
+    </table>
+</div>
+
+{% endblock %}

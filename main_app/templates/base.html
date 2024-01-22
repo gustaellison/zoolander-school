@@ -54,6 +54,10 @@
                           {% csrf_token %}
                           <button type="submit" class="btn-flat white-text">Students</button>
                         </form>
+                        <form method="post" action="/teachers/">
+                          {% csrf_token %}
+                          <button type="submit" class="btn-flat white-text">Teachers</button>
+                        </form>
                         <form method="post" action="/create_assignment/">
                           {% csrf_token %}
                           <button type="submit" class="btn-flat white-text">Assignment</button>
