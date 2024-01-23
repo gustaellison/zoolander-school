@@ -76,6 +76,24 @@
         <!-- TAB 3 -->
         <div class="tab-pane fade" id="tab-content-3">
           <h4>Teacher Profile</h4>
+            <table class="table">
+              <thread>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+              </tr>
+              </thread>
+              {% for teacher in classroom.teachers.all %}
+              <tbody>
+                <tr>
+                  <td><a href=" /teachers/{{ teacher.id }}">
+                    {{ teacher.name }}
+                  </a></td>
+                  <td>{{ student.email }}</td>
+                  {% endfor %}
+                  </tr>
+                </tbody>
+          </table>
           {% for teacher in classroom.teachers.all %}
             <p>{{ teacher.name }}</p>
             <p>{{ teacher.created_at }}</p>
@@ -101,6 +119,7 @@
                 <th scope="col">Grade</th>
                 <th scope="col">Address</th>
                 <th scope="col">Parent Contact</th>
+                <th scope="col">Picture</th>
               </tr>
               </thread>
               {% for student in classroom.students.all %}
@@ -115,13 +134,18 @@
                   <td>{{ student.grade }}</td>
                   <td>{{ student.address }}</td>
                   <td>{{ student.parents }}</td>
-                  {% endfor %}
-                  </tr>
-                </tbody>
-          </table>
-                
+                  <td>
+                    {% for photo in student.photo_set.all %}
+                      <img class="img-thumbnail" src="{{ photo.url }}" alt="Student Photo" width="50">
+                    {% empty %}
+                    No Photo Uploaded
+                    {% endfor %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
-      </div>
       <!-- END OF TABS -->
 
       <div class="card">
