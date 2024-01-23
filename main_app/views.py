@@ -267,3 +267,10 @@ class AnnouncementUpdate(UpdateView):
 def meeting_index(request):
     classrooms = Classroom.objects.all()
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
+
+
+
+def assoc_classroom(request, student_id, classroom_id):
+  Student.objects.get(id=student_id).classroom.add(classroom_id)
+  return render('classroom', classroom_id=classroom_id)
+

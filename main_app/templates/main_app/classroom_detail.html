@@ -7,16 +7,17 @@
   <div class="card-body">
     <h4 class="card-title">{{ classroom.name }}</h4>
     <p class="card-text">{{ classroom.description }}</p>
-    <p class="card-text"><small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+    <p class="card-text"><a href="{{ classroom.zoom_link }}">
+      <small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+    </a>
   </div>
 </div>
-      {% if user.teacher %}
-        <form method="post" action="{% url 'classroom_detail' pk=classroom.id %}">
+      <div class style="margin: 20px">
+        <form action="{% url 'assoc_classroom' student_id=user.id classroom_id=classroom.id %}" method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save Zoom Link</button>
+            <button type="submit" class="">Sign Up For Class!</button>
         </form>
-      {% endif %}
+    </div>
 
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">

@@ -14,6 +14,9 @@ urlpatterns = [
     path('teachers/<int:pk>/update/', views.TeacherUpdate.as_view(), name='teacher_update'),
     path('teachers/<int:teacher_id>/', views.teacher_detail, name="teacher_detail"),
     path('accounts/signup/', views.signup, name='signup'),
+    
+    path('classrooms/<int:classroom_id>/assoc_classroom/<int:student_id>/', views.assoc_classroom, name='assoc_classroom'),
+
     path('classrooms/<int:classroom_id>/announcement/create/', views.AnnouncementFormView.as_view(), name='announcement_form'),
     path('add_announcement/<int:classroom_id>/', views.add_announcement, name='add_announcement'),
     path('classrooms/<int:classroom_id>/profile/create/', views.TeacherFormView.as_view(), name='teacher_form'),
