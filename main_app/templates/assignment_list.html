@@ -28,7 +28,7 @@
             <strong>Assignment Submitted</strong><br>
             {% if assignment.submitted_file %}
               Submitted File: {{ assignment.submitted_file.name }} ({{ assignment.submitted_file.size|filesizeformat }})<br>
-              <a href="{% url 'download_file' assignment.id %}">Download Submitted File</a><br>
+               <!--<a href="{% url 'download_file' assignment.id %}">Download Submitted File</a><br> -->
               <!-- Option to resubmit if file already exists -->
               <a class="resubmit-assignment-link" href="{% url 'submit_assignment' assignment.id %}">Resubmit Assignment</a>
             {% else %}

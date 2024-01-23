@@ -19,7 +19,7 @@
             - <a href="{% url 'grade_assignments' %}">Grade Assignment</a>
           {% endif %}
         </p>
-        <p>Submitted File: <a href="{% url 'download_file' assignment.id %}" target="_blank">{{ assignment.submitted_file.name }}</a></p>
+        <p>Submitted File: <!-- <a href="{% url 'download_file' assignment.id %}" target="_blank"> -->{{ assignment.submitted_file.name }}</a></p>
       </div>
     {% endfor %}
   </div>
