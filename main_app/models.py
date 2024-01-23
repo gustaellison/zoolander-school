@@ -59,10 +59,7 @@ class Classroom(models.Model):
     schedule = models.DateField('Schedule')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    # students = models.ManyToManyField(Student)
     students = models.ManyToManyField('Student', related_name='student_relation', symmetrical=False)
-    # teacher = models.CharField(max_length=100, default="no teacher")
-    # teachers = models.ManyToManyField(Teacher)
     teachers = models.ManyToManyField('Teacher', related_name='teacher_relation', symmetrical=False)
 
     zoom_link = models.URLField(blank=True, null=True)
@@ -212,6 +209,10 @@ class SubmittedAssignmentsView(View):
 class Photo(models.Model):
     url = models.CharField(max_length=200)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Photo for student_id: {self.student_id} @{self.url}"
+    
+    def __str__(self):
+        return f"Photo for teacher_id: {self.teacher_id} @{self.url}"

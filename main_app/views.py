@@ -33,13 +33,12 @@ from .models import  Student
 
 
 from django.http import Http404
-# Create your views here.
 
 
 class GradesView(View):
     def get(self, request, *args, **kwargs):
         students = Student.objects.all()
-        overall_gpa = calculate_overall_gpa(students)  # Implement a function to calculate overall GPA
+        overall_gpa = calculate_overall_gpa(students)  
 
         return render(request, 'grades_overview.html', {'students': students, 'overall_gpa': overall_gpa})
     
@@ -193,9 +192,7 @@ class StudentCreate(LoginRequiredMixin,CreateView):
     fields = ['name','email','gpa']
 
     def form_valid(self, form):
-    # Assign the logged in user (self.request.user)
       form.instance.user = self.request.user  
-    # Let the CreateView do its job as usual
       return super().form_valid(form)
     
 
@@ -229,8 +226,8 @@ class AssignmentListView(ListView):
     
 class AssignmentDelete(LoginRequiredMixin, DeleteView):
     model = Assignment
-    template_name = 'assignment_confirm_delete.html'  # Create a confirmation template
-    success_url = reverse_lazy('assignment_list')  # Redirect to the assignment list after deletion
+    template_name = 'assignment_confirm_delete.html'  
+    success_url = reverse_lazy('assignment_list')  
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
