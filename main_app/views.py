@@ -22,13 +22,12 @@ from .models import ZoomLinkForm
 
 
 from django.http import Http404
-# Create your views here.
 
 
 class GradesView(View):
     def get(self, request, *args, **kwargs):
         students = Student.objects.all()
-        overall_gpa = calculate_overall_gpa(students)  # Implement a function to calculate overall GPA
+        overall_gpa = calculate_overall_gpa(students)  
 
         return render(request, 'grades_overview.html', {'students': students, 'overall_gpa': overall_gpa})
     
@@ -182,9 +181,7 @@ class StudentCreate(LoginRequiredMixin,CreateView):
     fields = ['name','email','gpa']
 
     def form_valid(self, form):
-    # Assign the logged in user (self.request.user)
       form.instance.user = self.request.user  
-    # Let the CreateView do its job as usual
       return super().form_valid(form)
     
 
@@ -211,8 +208,8 @@ class AssignmentListView(View):
     
 class AssignmentDelete(LoginRequiredMixin, DeleteView):
     model = Assignment
-    template_name = 'assignment_confirm_delete.html'  # Create a confirmation template
-    success_url = reverse_lazy('assignment_list')  # Redirect to the assignment list after deletion
+    template_name = 'assignment_confirm_delete.html'  
+    success_url = reverse_lazy('assignment_list')  
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset=queryset)
@@ -287,21 +284,16 @@ def meeting_index(request):
 
 @login_required
 def add_photo(request, model_type, model_id):
-    # photo-file will be the "name" attribute on the <input type="file">
     photo_file = request.FILES.get('photo-file', None)
     
     if photo_file:
         s3 = boto3.client('s3')
-        # need a unique "key" for S3 / needs image file extension too
         key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-        # just in case something goes wrong
         try:
             bucket = os.environ['S3_BUCKET']
             s3.upload_fileobj(photo_file, bucket, key)
-            # build the full url string
             url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
             
-            # Check the model type and create the photo accordingly
             if model_type == 'teacher':
                 Teacher.objects.get(pk=model_id).photo_set.create(url=url)
             elif model_type == 'student':
@@ -311,13 +303,11 @@ def add_photo(request, model_type, model_id):
             print('An error occurred uploading file to S3')
             print(e)
     
-    # Redirect to the appropriate detail view based on the model_type
     if model_type == 'teacher':
         return redirect('teacher_detail', teacher_id=model_id)
     elif model_type == 'student':
         return redirect('student_detail', student_id=model_id)
     else:
-        # Handle the case where model_type is neither teacher nor student
         return HttpResponseBadRequest("Invalid model type")
 
 

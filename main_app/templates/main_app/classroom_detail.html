@@ -35,10 +35,8 @@
       </ul>
 
 
-      <!-- START TABS -->
       <div class="tab-content mt-3">
         
-        <!-- TAB 1 -->
         <div class="tab-pane fade show active" id="tab-content-1">
 
 
@@ -68,13 +66,11 @@
           
         </div>
     
-        <!-- TAB 2 -->
         <div class="tab-pane fade" id="tab-content-2">
           <h4>Schedule</h4>
           <p>{{ classroom.schedule }}</p>
         </div>
 
-        <!-- TAB 3 -->
         <div class="tab-pane fade" id="tab-content-3">
           <h4>Teacher Profile</h4>
           {% for teacher in classroom.teachers.all %}
@@ -89,7 +85,6 @@
             </div>
         </div>
 
-          <!-- TAB 4 -->
         <div class="tab-pane fade" id="tab-content-4">
             <h4>Students</h4>
             <table class="table">
@@ -123,7 +118,6 @@
                 
           </div>
       </div>
-      <!-- END OF TABS -->
       {% if user.teacher %}
       <div class="card-block" style="margin: 40px">
         <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>

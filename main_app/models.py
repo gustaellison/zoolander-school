@@ -55,10 +55,7 @@ class Classroom(models.Model):
     schedule = models.DateField('Schedule')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    # students = models.ManyToManyField(Student)
     students = models.ManyToManyField('Student', related_name='student_relation', symmetrical=False)
-    # teacher = models.CharField(max_length=100, default="no teacher")
-    # teachers = models.ManyToManyField(Teacher)
     teachers = models.ManyToManyField('Teacher', related_name='teacher_relation', symmetrical=False)
 
     zoom_link = models.URLField(blank=True, null=True)
@@ -121,7 +118,6 @@ class Comment(models.Model):
 
 class Photo(models.Model):
     url = models.CharField(max_length=200)
-    # use generic relations to allow a Photo to belong to either a Teacher or a Student
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
