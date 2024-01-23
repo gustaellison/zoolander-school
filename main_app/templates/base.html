@@ -27,7 +27,7 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg text-bg-primary bg-gradient ">
+      <nav class="navbar navbar-expand-lg text-bg-primary bg-gradient " style="margin-bottom: 20px">
             <div class="container-fluid">
               <a class="navbar-brand text-white" href="/">
                 <img src="https://i.postimg.cc/ydr79x4B/download.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
@@ -48,12 +48,18 @@
                       <a class="nav-link text-white" aria-current="page" href="/create_assignment">Assignments</a>
                     </li> 
                     <li class="nav-item">
+                      <a class="nav-link text-white" aria-current="page" href="/submitted_assignments">Submitted Assignments</a>
+                    </li>
+                    <li class="nav-item">
                       <a class="nav-link text-white" aria-current="page" href="{% url 'grades_view' %}">Student Grades</a>
                     </li> 
                     {% endif %}
                     {% if user.is_authenticated and user.student %}
                     <li class="nav-item">
-                      <a class="nav-link text-white" aria-current="page" href="{% url 'my_grades' user.student.id %}">Grades</a>
+                      <a class="nav-link text-white" aria-current="page" href="/assignment_list"> Assignments</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" aria-current="page" href="/classrooms">Classes</a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
