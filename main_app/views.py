@@ -286,10 +286,9 @@ def meeting_index(request):
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
 
 @login_required
-def add_photo(request, model_type, model_id):
+def add_photo_student(request, student_id):
     # photo-file will be the "name" attribute on the <input type="file">
     photo_file = request.FILES.get('photo-file', None)
-    
     if photo_file:
         s3 = boto3.client('s3')
         # need a unique "key" for S3 / needs image file extension too
@@ -300,31 +299,9 @@ def add_photo(request, model_type, model_id):
             s3.upload_fileobj(photo_file, bucket, key)
             # build the full url string
             url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
-            
-            # Check the model type and create the photo accordingly
-            if model_type == 'teacher':
-                Teacher.objects.get(pk=model_id).photo_set.create(url=url)
-            elif model_type == 'student':
-                Student.objects.get(pk=model_id).photo_set.create(url=url)
-            
+            # we can assign to cat_id or cat (if you have a cat object)
+            Photo.objects.create(url=url, student_id=student_id)
         except Exception as e:
             print('An error occurred uploading file to S3')
             print(e)
-    
-    # Redirect to the appropriate detail view based on the model_type
-    if model_type == 'teacher':
-        return redirect('teacher_detail', teacher_id=model_id)
-    elif model_type == 'student':
-        return redirect('student_detail', student_id=model_id)
-    else:
-        # Handle the case where model_type is neither teacher nor student
-        return HttpResponseBadRequest("Invalid model type")
-
-
-
-
-
-def assoc_classroom(request, student_id, classroom_id):
-  Student.objects.get(id=student_id).classroom.add(classroom_id)
-  return render('classroom', classroom_id=classroom_id)
-
+    return redirect('student_detail', student_id=student_id)
