@@ -320,3 +320,11 @@ def add_photo(request, model_type, model_id):
         # Handle the case where model_type is neither teacher nor student
         return HttpResponseBadRequest("Invalid model type")
 
+
+
+
+
+def assoc_classroom(request, student_id, classroom_id):
+  Student.objects.get(id=student_id).classroom.add(classroom_id)
+  return render('classroom', classroom_id=classroom_id)
+
