@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Grade Assignments</h1>
+
+<form method="post" action="{% url 'grade_assignments' %}">
+  {% csrf_token %}
+  <table>
+    <thead>
+      <tr>
+        <th>Assignment</th>
+        <th>Student</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for assignment in assignments %}
+        <tr>
+          <td>{{ assignment.name }}</td>
+          <td>{{ assignment.student.name }}</td>
+          <td><input type="text" name="grades" value="{{ assignment.grade }}"></td>
+          <input type="hidden" name="assignment_ids" value="{{ assignment.id }}">
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit">Submit Grades</button>
+</form>
+
+{% endblock %}
