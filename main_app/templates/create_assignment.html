@@ -7,7 +7,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Create Assignment</button>
-    <a class="btn-flat white-text" href="{% url 'assignment_list' %}">Assignment List</a>
     <button type='submit' class='btn-flat white-text'><a class="nav-link" href="/">Back to Dashboard</a></button>
 </form>
 
