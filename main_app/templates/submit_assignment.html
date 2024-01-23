@@ -5,32 +5,39 @@
     <h1>Assignment Details</h1>
     <p>Assignment Name: {{ assignment.name }}</p>
     <p>Due Date: {{ assignment.due_date }}</p>
+    
+    {% if assignment.submitted_file %}
+  <h2>Submitted File</h2>
+  <p>File: <a href="{% url 'download_file' assignment.id %}" target="_blank">{{ assignment.submitted_file.name }}</a></p>
+  <p class="text-success">Assignment already submitted. No further action needed.</p>
+  <form method="post" enctype="multipart/form-data" action="{% url 'submit_assignment' assignment.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Assignment</button>
+  </form>
+  
+{% else %}
+  <h1>Submit Assignment</h1>
+  <form method="post" enctype="multipart/form-data" action="{% url 'submit_assignment' assignment.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Assignment</button>
+  </form>
+{% endif %}
 
-    {% if assignment.submitted_by_student %}
-      <h2>Submitted File</h2>
-      <p>File: <a href="{% url 'download_file' assignment.id %}" target="_blank">{{ assignment.submitted_file.name }}</a></p>
-      <p class="text-success">Assignment already submitted. No further action needed.</p>
-    {% else %}
-      <h2>Submit Assignment</h2>
-      <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">Submit Assignment</button>
-      </form>
-    {% endif %}
+{% if submission_success %}
+  <div class="alert alert-success mt-4" role="alert">
+    Assignment submitted successfully!
+  </div>
+{% endif %}
 
-    {% if submission_success %}
-      <div class="alert alert-success mt-4" role="alert">
-        Assignment submitted successfully!
-      </div>
-    {% endif %}
-
-    {% if submission_error %}
-      <div class="alert alert-danger mt-4" role="alert">
-        Error submitting the assignment. Please try again.
-      </div>
-    {% endif %}
+{% if submission_error %}
+  <div class="alert alert-danger mt-4" role="alert">
+    Error submitting the assignment. Please try again.
+  </div>
+{% endif %}
 
     <a href="{% url 'assignment_list' %}" class="btn btn-secondary mt-4">Back to Assignment List</a>
   </div>
 {% endblock %}
+a

@@ -3,7 +3,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete,submit_assignment,submitted_assignments_view,download_file
+from .views import grade_assignments,  GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete,submit_assignment,submitted_assignments_view,download_file
+
 
 urlpatterns = [
     path('', views.home_index, name='home_index'),
@@ -38,6 +39,7 @@ urlpatterns = [
     path('meeting/', views.meeting_index, name='meeting_index'),
     path('assignment/<int:assignment_id>/submit/', submit_assignment, name='submit_assignment'),
     path('submitted_assignments/', submitted_assignments_view, name='submitted_assignments'),
-    path('download_file/<int:assignment_id>/', download_file, name='download_file')
+    path('download_file/<int:assignment_id>/', download_file, name='download_file'),
+    path('grade_assignments/', grade_assignments, name='grade_assignments'),
 
 ]

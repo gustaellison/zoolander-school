@@ -3,6 +3,8 @@ from django.urls import reverse
 from datetime import date
 from django.contrib.auth.models import User
 from django import forms
+from django.views import View
+from django.shortcuts import render,redirect
 
 
 # Create your models here.
@@ -66,6 +68,10 @@ class Classroom(models.Model):
     
     def get_absolute_url(self):
         return reverse('classroom_detail', args=[str(self.id)])
+    
+class Grade(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
+    grade = models.DecimalField(max_digits=5, decimal_places=2)    
 
 class Assignment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -76,6 +82,8 @@ class Assignment(models.Model):
     due_date = models.DateField(blank=True, null=True)
     submitted_by_student = models.BooleanField(default=False)
     submitted_file = models.FileField(upload_to='assignment_submissions/', null=True, blank=True)
+    grade = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    graded = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -86,12 +94,10 @@ class ZoomLinkForm(forms.ModelForm):
         fields = ['zoom_link']   
 
 class AssignmentSubmissionForm(forms.Form):
-    submitted_file = forms.FileField()         
+    submitted_file = forms.FileField(required=False)       
 
 
-class Grade(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='grades')
-    grade = models.DecimalField(max_digits=5, decimal_places=2)
+
 
 class AssignmentForm(forms.ModelForm):
     google_drive_link = forms.URLField(label='Google Drive Link', required=False)
@@ -132,3 +138,70 @@ class AssignmentSubmission(models.Model):
 
     def __str__(self):
         return f"{self.student.name}'s submission for {self.assignment.name}" 
+    
+
+class GradeAssignmentForm(forms.Form):
+    grades = forms.DecimalField(label='Grades', required=True)
+
+    class Meta:
+        model = Assignment
+        fields = ['grade']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        grades_data = cleaned_data.get('grades')
+
+        if grades_data is None:
+            raise forms.ValidationError("No grades provided.")
+
+        return cleaned_data
+            
+class SubmittedAssignmentsView(View):
+    template_name = 'submitted_assignments.html'
+
+    def get(self, request, *args, **kwargs):
+        # Fetch all submitted assignments
+        submitted_assignments = Assignment.objects.filter(submitted_by_student=True)
+
+        # Provide the link or button for grading assignments
+        grade_assignments_url = reverse('grade_assignments')
+        grade_form = GradeAssignmentForm()
+
+        return render(request, self.template_name, {
+            'submitted_assignments': submitted_assignments,
+            'grade_assignments_url': grade_assignments_url,
+            'grade_form': grade_form,
+            'grades_data': request.GET.get('grades_data', ''),  # Pass the grades_data to the template
+        })
+
+    def post(self, request, *args, **kwargs):
+        # Handle form submission to assign grades
+        grade_form = GradeAssignmentForm(request.POST)
+
+        if grade_form.is_valid():
+            grades_data = grade_form.cleaned_data['grades']
+
+            # Loop through assignments and create/update grades
+            for assignment_id in request.POST.getlist('assignments'):
+                assignment = Assignment.objects.get(pk=assignment_id)
+
+                # Create or update the grade for the assignment
+                grade, created = Grade.objects.get_or_create(student=assignment.student, defaults={'grade': grades_data})
+
+                if not created:
+                    grade.grade = grades_data
+                    grade.save()
+
+                # Mark the assignment as graded
+                assignment.graded = True
+                assignment.grade = grade
+                assignment.save()
+
+            return redirect('submitted_assignments')
+
+        # If the form is not valid, render the page with error messages
+        return render(request, self.template_name, {
+            'submitted_assignments': Assignment.objects.filter(submitted_by_student=True),
+            'grade_assignments_url': reverse('grade_assignments'),
+            'grade_form': grade_form,
+        })

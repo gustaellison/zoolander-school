@@ -10,7 +10,10 @@
         <p>
           <strong>{{ assignment.name }}</strong><br>
           Assigned to: {{ assignment.student.name }}<br>
-          Due Date: {{ assignment.due_date }}
+          Due Date: {{ assignment.due_date|date:"F j, Y" }}
+          {% if assignment.grade %}
+            - <strong>Grade: {{ assignment.grade }}</strong><br>
+          {% endif %}
           {% if user.teacher %}
             - <a href="{% url 'assignment_confirm_delete' assignment.id %}">Delete</a>
           {% endif %}
@@ -23,11 +26,18 @@
         {% if assignment.submitted_by_student %}
           <p>
             <strong>Assignment Submitted</strong><br>
-            Submitted File: {{ assignment.submitted_file.name }}<br>
-            <a href="{% url 'download_file' assignment.id %}">Download Submitted File</a>
+            {% if assignment.submitted_file %}
+              Submitted File: {{ assignment.submitted_file.name }} ({{ assignment.submitted_file.size|filesizeformat }})<br>
+              <a href="{% url 'download_file' assignment.id %}">Download Submitted File</a><br>
+              <!-- Option to resubmit if file already exists -->
+              <a class="resubmit-assignment-link" href="{% url 'submit_assignment' assignment.id %}">Resubmit Assignment</a>
+            {% else %}
+              No submitted file available
+              <a class="submit-assignment-link" href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
+            {% endif %}
           </p>
         {% else %}
-          <a href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
+          <a class="submit-assignment-link" href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
         {% endif %}
       </div>
     {% endfor %}

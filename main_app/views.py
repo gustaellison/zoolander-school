@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView, DetailView
-from .models import Student, Classroom, Teacher, Announcement
+from .models import Student, Classroom, Teacher, Announcement,GradeAssignmentForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -19,10 +19,11 @@ from django.http import HttpResponseForbidden
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404,HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 import os
+from django import forms
 
 # Create your views here.
 
@@ -190,16 +191,23 @@ def create_assignment(request):
             teacher = Teacher.objects.get(user=request.user)
             assignment.teacher = teacher  
             assignment.save()
-            return redirect('assignment_list')  
+            return redirect('submitted_assignments')  
     else:
         form = AssignmentForm()
 
     return render(request, 'create_assignment.html', {'form': form})    
 
-class AssignmentListView(View):
-    def get(self, request, *args, **kwargs):
+class AssignmentListView(ListView):
+    model = Assignment
+    template_name = 'assignment_list.html'
+    context_object_name = 'assignments'
+
+    def get_queryset(self):
+        # Fetch assignments and annotate them with a boolean indicating if a file is submitted
         assignments = Assignment.objects.all()
-        return render(request, 'assignment_list.html', {'assignments': assignments})
+        for assignment in assignments:
+            assignment.has_submitted_file = assignment.submitted_file is not None
+        return assignments
     
 class AssignmentDelete(LoginRequiredMixin, DeleteView):
     model = Assignment
@@ -267,59 +275,108 @@ def meeting_index(request):
     classrooms = Classroom.objects.all()
     return render(request, 'meeting.html', {'classrooms': classrooms}) 
 
-from django.shortcuts import get_object_or_404
-
-from django.shortcuts import get_object_or_404
 
 def submit_assignment(request, assignment_id):
-    # Check if the user has a related student profile
-    if hasattr(request.user, 'student'):
-        student = request.user.student
+    # Ensure the assignment is retrieved correctly, and the student matches the logged-in user
+    assignment = get_object_or_404(Assignment, id=assignment_id)
 
-        assignment = get_object_or_404(Assignment, id=assignment_id, classroom__students=student)
+    if request.method == 'POST':
+        form = AssignmentSubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            assignment.submitted_by_student = True
+            assignment.submitted_file = form.cleaned_data['submitted_file']
+            assignment.save()
+            return redirect('assignment_list')  # Redirect to the list of assignments
 
-        if request.method == 'POST':
-            form = AssignmentSubmissionForm(request.POST, request.FILES)
-            if form.is_valid():
-                assignment.submitted_by_student = True
-                assignment.submitted_file = form.cleaned_data['submitted_file']
-                assignment.save()
-                return redirect('assignment_list')  # Redirect to the list of assignments
-        else:
-            form = AssignmentSubmissionForm()
-
-        return render(request, 'submit_assignment.html', {'form': form})
-    else:
-        # Handle the case where the user has no related student profile (redirect or display an error)
-        # You can customize this based on your application's logic
-        return HttpResponseForbidden("You don't have a student profile.")
+    return render(request, 'submit_assignment.html', {'assignment': assignment, 'form': AssignmentSubmissionForm()})
 
 
 
 
 def submitted_assignments_view(request):
-    # Fetch all submitted assignments
+    # Fetch all submitted assignments along with grades
     submitted_assignments = Assignment.objects.filter(submitted_by_student=True)
+    graded_assignments = Assignment.objects.filter(submitted_by_student=True, grade__isnull=False)
 
-    return render(request, 'submitted_assignments.html', {'submitted_assignments': submitted_assignments})
+    return render(request, 'submitted_assignments.html', {'submitted_assignments': submitted_assignments, 'graded_assignments': graded_assignments})
 
 
 def download_file(request, assignment_id):
-    # Check if the user has a related student
-    if hasattr(request.user, 'student'):
-        student = request.user.student
+    assignment = get_object_or_404(Assignment, id=assignment_id)
 
-        submission = get_object_or_404(AssignmentSubmission, assignment_id=assignment_id, student=student)
+    # Check if the assignment has a submission
+    if not assignment.submitted_by_student or not assignment.submissions.exists():
+        raise Http404("No assignment submission found for the given assignment ID.")
 
-        file_path = submission.submitted_file.path
-        with open(file_path, 'rb') as file:
-            response = HttpResponse(file.read(), content_type='application/octet-stream')
-            response['Content-Disposition'] = f'attachment; filename="{submission.submitted_file.name}"'
-            return response
+    # Assuming one submission per assignment for simplicity
+    submission = assignment.submissions.first()
+
+    file_path = submission.submitted_file.path
+    with open(file_path, 'rb') as file:
+        response = HttpResponse(file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename={submission.submitted_file.name}'
+        return response
+    
+
+
+def grade_assignments(request):
+    if request.method == 'POST':
+        # Handle form submission and update grades
+        assignment_ids = request.POST.getlist('assignment_ids')
+        grades = request.POST.getlist('grades')
+
+        for assignment_id, grade in zip(assignment_ids, grades):
+            assignment = Assignment.objects.get(pk=assignment_id)
+            assignment.grade = grade
+            assignment.save()
+
+        return redirect('submitted_assignments')  # Redirect to the assignment list or another page
+
     else:
-        # Handle the case where the user has no related student (redirect or display an error)
-        # You can customize this based on your application's logic
-        return HttpResponseForbidden("You don't have a student profile.")
+        # Display a list of submitted assignments for grading
+        assignments = Assignment.objects.filter(submitted_by_student=True)
+        return render(request, 'grade_assignments.html', {'assignments': assignments})
+
+class GradeAssignmentsView(View):
+    template_name = 'grade_assignments.html'
+
+    def get(self, request, assignment_id):
+        assignment = Assignment.objects.get(id=assignment_id)
+        form = GradeAssignmentForm(instance=assignment)
+        return render(request, self.template_name, {'assignment': assignment, 'form': form})
+
+    def post(self, request, assignment_id):
+        assignment = Assignment.objects.get(id=assignment_id)
+        form = GradeAssignmentForm(request.POST, instance=assignment)
+        if form.is_valid():
+            form.save()
+            return redirect('submitted_assignments')
+
+        return render(request, self.template_name, {'assignment': assignment, 'form': form})
+
+
+
+
+    
+class GradeAssignmentForm(forms.Form):
+    def __init__(self, assignments=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if assignments is not None:
+            for assignment in assignments:
+                field_name = f"grades_{assignment.id}"
+                self.fields[field_name] = forms.DecimalField(
+                    label=f"Grade for {assignment.name}",
+                    required=True
+                )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        # Additional validation logic if needed
+        return cleaned_data
+
+
+
 
 # class ClassroomDetail(FormView):
 #     template_name = 'classroom_detail.html'
