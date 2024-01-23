@@ -1,0 +1,31 @@
+User Authentication:
+
+Allow users to sign up, log in, and manage their accounts.
+
+Dashboard:
+
+Display an overview of the user's teams, players, and upcoming matches.
+
+Teams Management:
+
+Create, edit, and delete soccer teams.
+View details of each team, including the list of players.
+
+Players Management:
+
+Add, edit, and remove players from teams.
+Include player details such as name, position, jersey number, etc.
+
+Matches Schedule:
+
+Create and manage the schedule for upcoming matches.
+Display match details, including teams involved, date, time, and location.
+
+Match Results:
+
+Allow users to input match results and update relevant statistics.
+
+Statistics:
+
+Provide a section for displaying team and player statistics.
+Include features like goals scored, assists, clean sheets, etc.

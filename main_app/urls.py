@@ -1,6 +1,11 @@
+
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, MyGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete, AnnouncementUpdate
+from .views import grade_assignments,  GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete,submit_assignment,submitted_assignments_view,download_file
+
+from .views import  MyGradesView, AnnouncementUpdate
 
 urlpatterns = [
     path('', views.home_index, name='home_index'),
@@ -37,6 +42,10 @@ urlpatterns = [
     path('assignment_list/', AssignmentListView.as_view(), name='assignment_list'),
     path('assignment/<int:pk>/delete/', AssignmentDelete.as_view(), name='assignment_confirm_delete'),
     path('help/', views.help_index, name='help_index'),
-    path('meeting/', views.meeting_index, name='meeting_index'),   
+    path('meeting/', views.meeting_index, name='meeting_index'),
+    path('assignment/<int:assignment_id>/submit/', submit_assignment, name='submit_assignment'),
+    path('submitted_assignments/', submitted_assignments_view, name='submitted_assignments'),
+    path('download_file/<int:assignment_id>/', download_file, name='download_file'),
+    path('grade_assignments/', grade_assignments, name='grade_assignments'),
     path('students/<int:student_id>/add_photo_student/', views.add_photo_student, name='add_photo_student'),
 ]

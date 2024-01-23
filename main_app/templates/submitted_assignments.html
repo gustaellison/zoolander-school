@@ -1,0 +1,30 @@
+<!-- submitted_assignments.html -->
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Submitted Assignments</h1>
+
+{% if submitted_assignments %}
+  <div class="assignment-list">
+    {% for assignment in submitted_assignments %}
+      <div class="assignment-item">
+        <p>
+          <strong>{{ assignment.name }}</strong><br>
+          Submitted by: {{ assignment.student.name }}<br>
+          Due Date: {{ assignment.due_date|date:"F j, Y" }}
+          {% if assignment.grade %}
+            - <strong>Grade: {{ assignment.grade }}</strong>
+            - <a href="{% url 'grade_assignments' %}">Regrade Assignment</a>
+          {% else %}
+            - <a href="{% url 'grade_assignments' %}">Grade Assignment</a>
+          {% endif %}
+        </p>
+        <p>Submitted File: <!-- <a href="{% url 'download_file' assignment.id %}" target="_blank"> -->{{ assignment.submitted_file.name }}</a></p>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No submitted assignments available.</p>
+{% endif %}
+
+{% endblock %}
