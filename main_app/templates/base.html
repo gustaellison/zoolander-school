@@ -56,34 +56,31 @@
                       <a class="nav-link text-white" aria-current="page" href="{% url 'my_grades' user.student.id %}">Grades</a>
                     </li>
                     {% endif %}
-                      <li class="nav-item">
-                        <a class="nav-link text-white" aria-current="page" href="/classrooms">Classes</a>
-                      </li>
                     <li class="nav-item">
                       <a class="nav-link text-white" aria-current="page" href="/meeting">Zoom</a>
                     </li> 
                   <li class="nav-item mx-2">
                     <form method="post" action="{% url 'logout' %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn-flat white-text">Logout</button>
+                      <button type="submit" class="btn text-white">Logout</button>
                     </form>
                   </li>
                   {% else %}
                   <li class="nav-item mx-2">
                     <form method="post" action="{% url 'signup' %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn-flat white-text">Sign Up</button>
+                      <button type="submit" class="btn text-white">Sign Up</button>
                     </form>
                   </li>
                   <li class="nav-item mx-2">
                     <form method="post" action="{% url 'login' %}">
                       {% csrf_token %}
-                      <button type="submit" class="btn-flat white-text">Log In</button>
+                      <button type="submit" class="btn text-white">Log In</button>
                     </form>
                   </li>
                   {% endif %}
                   <li class="nav-item mx-2">
-                    <button id="toggle" type="button" class="btn-flot white-text" data-bs-toggle="button">Light/Dark Mode</button>
+                    <button id="toggle" type="button" class="btn white-text" data-bs-toggle="button">Light/Dark Mode</button>
                   </li>
                 </ul>
               </div>

@@ -124,11 +124,12 @@
           </div>
       </div>
       <!-- END OF TABS -->
-
-      <div class="card">
+      {% if user.teacher %}
+      <div class="card-block" style="margin: 40px">
         <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>
         <a href="{% url 'classroom_delete' classroom.id %}">Delete Class</a><br><br><br>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>
