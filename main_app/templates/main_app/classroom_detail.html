@@ -4,20 +4,20 @@
 <h1>Classroom Detail</h1>
 
 <div class="carb mb-3">
-  <img src="{{ classroom.image }}" class='card-img-top' alt="No Image Found">
   <div class="card-body">
     <h4 class="card-title">{{ classroom.name }}</h4>
     <p class="card-text">{{ classroom.description }}</p>
-    <p class="card-text"><small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+    <p class="card-text"><a href="{{ classroom.zoom_link }}">
+      <small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+    </a>
   </div>
 </div>
-      {% if user.teacher %}
-        <form method="post" action="{% url 'classroom_detail' pk=classroom.id %}">
+      <div class style="margin: 20px">
+        <form action="{% url 'assoc_classroom' student_id=user.id classroom_id=classroom.id %}" method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save Zoom Link</button>
+            <button type="submit" class="">Sign Up For Class!</button>
         </form>
-      {% endif %}
+    </div>
 
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">
@@ -29,52 +29,131 @@
         <li class="nav-item">
           <a class="nav-link" data-bs-toggle="tab" href="#tab-content-3">Meet the Teacher!</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" data-bs-toggle="tab" href="#tab-content-4">All Students</a>
+        </li>
       </ul>
 
+
+      <!-- START TABS -->
       <div class="tab-content mt-3">
+        
+        <!-- TAB 1 -->
         <div class="tab-pane fade show active" id="tab-content-1">
+
+
           <h4>Announcements</h4>
           <div>
             <a href="/classrooms/{{ classroom.id }}/announcement/create/">Add Announcement</a>
           </div>
           
           {% for announcement in classroom.announcement_set.all %}
-            <p>{{ announcement.title }}</p>
-            <p>{{ announcement.created_at }}</p>
-            <p>{{ announcement.description }}</p>
-            <a href="/classrooms/{{ classroom.id }}/announcement/delete/">Delete Announcement</a>
-            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/create/">Comment</a>
+            <p>Title: {{ announcement.title }}</p>
+            <p>Date Posted: {{ announcement.created_at }}</p>
+            <p>Description: {{ announcement.description }}</p>
+            <form method="post" action="{% url 'announcement_delete' classroom_id=classroom.id title=announcement.title %}">
+              {% csrf_token %}
+              <button type="submit">Delete Announcement</button>
+            </form>
+            <form method="post" action="{% url 'announcement_update' classroom_id=classroom.id title=announcement.title %}">
+              {% csrf_token %}
+              <button type="submit">Edit Announcement</button>
+            </form>
+            <a href="/classrooms/{{ classroom.id }}/{{ announcement.id }}/comment/create/">Comment</a>
             {% for comment in announcement.comment_set.all %}
               <p>{{ comment.description }}</p>
             {% endfor %}
           {% endfor %}
-        </div>
-        </div>
 
+          
+        </div>
+    
+        <!-- TAB 2 -->
         <div class="tab-pane fade" id="tab-content-2">
           <h4>Schedule</h4>
           <p>{{ classroom.schedule }}</p>
         </div>
 
+        <!-- TAB 3 -->
         <div class="tab-pane fade" id="tab-content-3">
           <h4>Teacher Profile</h4>
-          {% for profile in classroom.profile_set.all %}
-            <p>{{ profile.title }}</p>
-            <p>{{ profile.created_at }}</p>
-            <p>{{ profile.description }}</p>
+            <table class="table">
+              <thread>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+              </tr>
+              </thread>
+              {% for teacher in classroom.teachers.all %}
+              <tbody>
+                <tr>
+                  <td><a href=" /teachers/{{ teacher.id }}">
+                    {{ teacher.name }}
+                  </a></td>
+                  <td>{{ student.email }}</td>
+                  {% endfor %}
+                  </tr>
+                </tbody>
+          </table>
+          {% for teacher in classroom.teachers.all %}
+            <p>{{ teacher.name }}</p>
+            <p>{{ teacher.created_at }}</p>
+            <p>{{ teacher.email }}</p>
             <a href="/classrooms/{{ classroom.id }}/profile/delete/">Delete Profile</a>
             <a href="/classrooms/{{ classroom.id }}/{{ profile.id }}/edit/">Edit Profile</a>
           {% endfor %}
-          <div>
-            <a href="/classrooms/{{ classroom.id }}/profile/create/">Add Teacher Profile</a>
-          </div>
+            <div>
+              <a href="/classrooms/{{ classroom.id }}/profile/create/">Add Teacher Profile</a>
+            </div>
         </div>
-      </div>
 
-      <div class="card-action">
+          <!-- TAB 4 -->
+        <div class="tab-pane fade" id="tab-content-4">
+            <h4>Students</h4>
+            <table class="table">
+              <thread>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">GPA</th>
+                <th scope="col">Email</th>
+                <th scope="col">Image</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Address</th>
+                <th scope="col">Parent Contact</th>
+                <th scope="col">Picture</th>
+              </tr>
+              </thread>
+              {% for student in classroom.students.all %}
+              <tbody>
+                <tr>
+                  <td><a href=" /students/{{ student.id }}">
+                    {{ student.name }}
+                  </a></td>
+                  <td>{{ student.gpa }}</td>
+                  <td>{{ student.email }}</td>
+                  <td>{{ student.image }}</td>
+                  <td>{{ student.grade }}</td>
+                  <td>{{ student.address }}</td>
+                  <td>{{ student.parents }}</td>
+                  <td>
+                    {% for photo in student.photo_set.all %}
+                      <img class="img-thumbnail" src="{{ photo.url }}" alt="Student Photo" width="50">
+                    {% empty %}
+                    No Photo Uploaded
+                    {% endfor %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+      <!-- END OF TABS -->
+      {% if user.teacher %}
+      <div class="card-block" style="margin: 40px">
         <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>
         <a href="{% url 'classroom_delete' classroom.id %}">Delete Class</a><br><br><br>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

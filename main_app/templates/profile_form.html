@@ -2,8 +2,7 @@
 {% block content %}
 
 <h1>Create Teacher Profile</h1>
-{% for classroom in classrooms %}
-    <form action="{% url 'add_profile' classroom.id %}" method="POST">
+    <form action="{% url 'add_profile' classroom_id %}" method="POST">
         {% csrf_token %}
         {{ form.errors }}
         <table>
@@ -11,6 +10,5 @@
         </table>
         <input type="submit" value="Submit">
     </form>
-{% endfor %}
 
 {% endblock %}

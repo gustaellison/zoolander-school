@@ -24,8 +24,35 @@
             <td>{{ student.grade }}</td>
             <td>{{ student.address }}</td>
             <td>{{ student.parents }}</td>
+            {{photo}}
+            <td>{{ student.classroom }}</td>
             <a class="nav-link" href="/">Back to Dashboard</a>
     </table>
+
+</div>
+
+{% for photo in student.photo_set.all %}
+  <div class="card mb-3">
+    <img class="card-img-top img-fluid" src="{{ photo.url }}" alt="Student Photo">
+  </div>
+{% empty %}
+  <div class="card card-body text-center">
+    No Photos Uploaded
+  </div>
+{% endfor %}
+
+<!-- Upload Photo Form -->
+<div class="card mt-3">
+  <div class="card-body">
+    <form action="{% url 'add_photo_student' student.id %}" enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="photo-file">Choose Photo:</label>
+        <input type="file" name="photo-file" class="form-control-file">
+      </div>
+      <button type="submit" class="btn btn-primary">Upload Photo</button>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

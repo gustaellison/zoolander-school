@@ -1,10 +1,15 @@
+import uuid
+import boto3
+import os
+
 from collections import UserList
 from django.db import IntegrityError
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render,redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic import ListView, DetailView
-from .models import Student, Classroom, Teacher, Announcement,GradeAssignmentForm
+from .models import Student, Classroom, Teacher, Announcement,GradeAssignmentForm, Photo
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -24,7 +29,10 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 import os
 from django import forms
+from .models import  Student
 
+
+from django.http import Http404
 # Create your views here.
 
 
@@ -34,6 +42,14 @@ class GradesView(View):
         overall_gpa = calculate_overall_gpa(students)  # Implement a function to calculate overall GPA
 
         return render(request, 'grades_overview.html', {'students': students, 'overall_gpa': overall_gpa})
+    
+class MyGradesView(View):
+   def get(self, request, student_id, *args, **kwargs):
+      student = get_object_or_404(Student, id=student_id)
+      assignments = Assignment.objects.filter(student=student)
+      grades = Grade.objects.filter(student=student)
+
+      return render(request, 'my_grade.html', {'student': student, 'assignments': assignments, 'grades': grades})
 
 class StudentGradesView(View):
     def get(self, request, student_id, *args, **kwargs):
@@ -55,6 +71,7 @@ def home_index(request):
 def meeting_index(request):
   return render(request, 'meeting.html')
 
+@login_required
 def add_comment(request, announcement_id):
   form = CommentForm(request.POST)
   if form.is_valid():
@@ -77,6 +94,7 @@ class CommentFormView(FormView):
     context['announcement_id'] = announcement_id
     return context
 
+@login_required
 def add_announcement(request, classroom_id):
   form = AnnouncementForm(request.POST)
   if form.is_valid():
@@ -99,7 +117,7 @@ class AnnouncementFormView(FormView):
     context['classroom_id'] = classroom_id
     return context
   
-
+@login_required
 def add_profile(request, classroom_id):
   form = TeacherForm(request.POST)
   if form.is_valid():
@@ -108,7 +126,7 @@ def add_profile(request, classroom_id):
     new_profile.save()
   return redirect('classroom_detail', pk=classroom_id)
 
-class TeacherFormView(FormView):
+class TeacherFormView(LoginRequiredMixin, FormView):
   template_name = 'profile_form.html'
   form_class = TeacherForm
   success_url = '/classrooms/'
@@ -264,7 +282,17 @@ class ClassroomCreate(LoginRequiredMixin, CreateView):
   
 class AnnouncementDelete(DeleteView):
   model = Announcement
-  success_url = '/classrooms'
+  success_url = '/classrooms/'
+
+  def get_object(self, queryset=None):
+        classroom_id = self.kwargs.get('classroom_id')
+        title = self.kwargs.get('title')  
+        return get_object_or_404(Announcement, classroom_id=classroom_id, title=title)
+  
+class AnnouncementUpdate(UpdateView):
+  model = Announcement
+  fields = ['title', 'description']
+  success_url = '/classrooms/'
 
   def get_object(self, queryset=None):
         classroom_id = self.kwargs.get('classroom_id')
@@ -394,4 +422,27 @@ class GradeAssignmentForm(forms.Form):
 #         classroom_id = self.kwargs.get('pk')
 #         context['classroom'] = Classroom.objects.get(pk=classroom_id)
 #         return context
+@login_required
+def add_photo_student(request, student_id):
+    # photo-file will be the "name" attribute on the <input type="file">
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        # need a unique "key" for S3 / needs image file extension too
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        # just in case something goes wrong
+        try:
+            bucket = os.environ['S3_BUCKET']
+            s3.upload_fileobj(photo_file, bucket, key)
+            # build the full url string
+            url = f"{os.environ['S3_BASE_URL']}{bucket}/{key}"
+            # we can assign to cat_id or cat (if you have a cat object)
+            Photo.objects.create(url=url, student_id=student_id)
+        except Exception as e:
+            print('An error occurred uploading file to S3')
+            print(e)
+    return redirect('student_detail', student_id=student_id)
 
+def assoc_classroom(request, student_id, classroom_id):
+  Student.objects.get(id=student_id).classroom.add(classroom_id)
+  return render('classroom', classroom_id=classroom_id)
