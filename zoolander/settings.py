@@ -33,6 +33,9 @@ DEBUG = True if os.environ['MODE'] == 'dev' else False
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://zoolander-school-5ddc97d6bd9e.herokuapp.com/' ,
+]
 
 # Application definition
 
