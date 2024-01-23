@@ -40,7 +40,7 @@ Students:
 
 When entering the site (link below), be sure to register either as a "student" or a "teacher". Depending on which you register for will determine what views you have as well as what functionality is available for you! 
 
-[Link to site!]() | [Trello Board](https://trello.com/b/DurbBYev/project-3-django-pythons) | [Excalidraw Wireframe](https://excalidraw.com/#room=45816e60f6079d100865,Wi9Qi9ycPFkIFRopB_lqiw) | [ERD](https://lucid.app/lucidchart/5d5f61f7-6b98-4121-868d-3ba6d4fec508/edit?beaconFlowId=013B9B06D1831217&invitationId=inv_81c976ad-d717-41ac-af46-667689c87ecf&page=0_0#) 
+[Link to site!](https://zoolander-school-5ddc97d6bd9e.herokuapp.com/) | [Trello Board](https://trello.com/b/DurbBYev/project-3-django-pythons) | [Excalidraw Wireframe](https://excalidraw.com/#room=45816e60f6079d100865,Wi9Qi9ycPFkIFRopB_lqiw) | [ERD](https://lucid.app/lucidchart/5d5f61f7-6b98-4121-868d-3ba6d4fec508/edit?beaconFlowId=013B9B06D1831217&invitationId=inv_81c976ad-d717-41ac-af46-667689c87ecf&page=0_0#) 
 ***
 #### **_Screenshots_**
 
@@ -54,7 +54,7 @@ When entering the site (link below), be sure to register either as a "student" o
 ![Register Account](https://i.postimg.cc/sDGbtp1w/Screenshot-2024-01-23-at-1-15-49-PM.png)
 
 ##### Assignments Page 
-![Teacher View]()
+![Teacher View](https://i.postimg.cc/bJtjxBWf/Screenshot-2024-01-23-at-4-22-01-PM.png)
 
 ***
 #### **_Future Updates_**
