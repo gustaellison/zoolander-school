@@ -7,16 +7,17 @@
   <div class="card-body">
     <h4 class="card-title">{{ classroom.name }}</h4>
     <p class="card-text">{{ classroom.description }}</p>
-    <p class="card-text"><small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+    <p class="card-text"><a href="{{ classroom.zoom_link }}">
+      <small class="text-body-secondary">Zoom Link: {{ classroom.zoom_link }}</small></p>
+    </a>
   </div>
 </div>
-      {% if user.teacher %}
-        <form method="post" action="{% url 'classroom_detail' pk=classroom.id %}">
+      <div class style="margin: 20px">
+        <form action="{% url 'assoc_classroom' student_id=user.id classroom_id=classroom.id %}" method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Save Zoom Link</button>
+            <button type="submit" class="">Sign Up For Class!</button>
         </form>
-      {% endif %}
+    </div>
 
       <ul class="nav nav-tabs" id="myTabs">
         <li class="nav-item">
@@ -47,9 +48,9 @@
           </div>
           
           {% for announcement in classroom.announcement_set.all %}
-            <p>{{ announcement.title }}</p>
-            <p>{{ announcement.created_at }}</p>
-            <p>{{ announcement.description }}</p>
+            <p>Title: {{ announcement.title }}</p>
+            <p>Date Posted: {{ announcement.created_at }}</p>
+            <p>Description: {{ announcement.description }}</p>
             <form method="post" action="{% url 'announcement_delete' classroom_id=classroom.id title=announcement.title %}">
               {% csrf_token %}
               <button type="submit">Delete Announcement</button>
@@ -147,11 +148,12 @@
             </table>
           </div>
       <!-- END OF TABS -->
-
-      <div class="card">
+      {% if user.teacher %}
+      <div class="card-block" style="margin: 40px">
         <a href="{% url 'classroom_update' classroom.id %}">Edit Class</a>
         <a href="{% url 'classroom_delete' classroom.id %}">Delete Class</a><br><br><br>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>

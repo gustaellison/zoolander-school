@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete, AnnouncementUpdate
+from .views import GradesView, StudentGradesView, MyGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete, AnnouncementUpdate
 
 urlpatterns = [
     path('', views.home_index, name='home_index'),
@@ -14,6 +14,9 @@ urlpatterns = [
     path('teachers/<int:pk>/update/', views.TeacherUpdate.as_view(), name='teacher_update'),
     path('teachers/<int:teacher_id>/', views.teacher_detail, name="teacher_detail"),
     path('accounts/signup/', views.signup, name='signup'),
+    
+    path('classrooms/<int:classroom_id>/assoc_classroom/<int:student_id>/', views.assoc_classroom, name='assoc_classroom'),
+
     path('classrooms/<int:classroom_id>/announcement/create/', views.AnnouncementFormView.as_view(), name='announcement_form'),
     path('add_announcement/<int:classroom_id>/', views.add_announcement, name='add_announcement'),
     path('classrooms/<int:classroom_id>/profile/create/', views.TeacherFormView.as_view(), name='teacher_form'),
@@ -28,6 +31,7 @@ urlpatterns = [
     path('classrooms/<int:pk>/update/', views.ClassroomUpdate.as_view(), name='classroom_update'),
     path('classrooms/<int:pk>/delete/', views.ClassroomDelete.as_view(), name='classroom_delete'),
     path('grades_overview.html', GradesView.as_view(), name='grades_view'),
+    path('grades/<int:student_id>/', MyGradesView.as_view(), name='my_grades'),
     path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
     path('create_assignment/', create_assignment, name='create_assignment'),
     path('assignment_list/', AssignmentListView.as_view(), name='assignment_list'),
