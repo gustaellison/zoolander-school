@@ -21,7 +21,7 @@ class Student(models.Model):
     address = models.CharField(max_length=300, default='None Listed')
     parents = models.CharField(max_length=200, default='None Listed')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
-    classroom = models.ManyToManyField('Classroom', related_name='classroom_relation', symmetrical=False)
+    classroom = models.ManyToManyField('Classroom', related_name='classroom_relation', symmetrical=False, blank=True)
     photos = GenericRelation('main_app.Photo')
 
 
@@ -40,8 +40,8 @@ class Teacher(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     students = models.ManyToManyField(Student)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='teacher', default=None)
-    classrooms = models.ManyToManyField('Classroom', related_name='classrooms_relation', symmetrical=False)
-
+    classrooms = models.ManyToManyField('Classroom', related_name='classrooms_relation', symmetrical=False, blank=True)
+    photos = GenericRelation('main_app.Photo')
 
     def __str__(self):
         return self.name
