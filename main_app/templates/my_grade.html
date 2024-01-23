@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>All Grades</h1>
+    <p>Overall GPA: {{ overall_gpa }}</p>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope='col'>Due Date</th>
+            <th scope="col">Assignment</th>
+            <th scope="col">Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grade in grades %}
+            <tr>
+                <td>{{ grade.assignment.due_date }}</td>
+                <td>{{ grade.assignment.name }}</td>
+                <td>{{ grade.grade }}</td>
+            </tr>
+        {% endfor %}
+    </ul>
+    </tbody>
+</table><br><br><br>
+<button type='submit' class='btn-flat white-text'><a class="nav-link" href="/">Back to Dashboard</a></button>
+
+{% endblock %}

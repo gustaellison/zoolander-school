@@ -48,9 +48,9 @@
           </div>
           
           {% for announcement in classroom.announcement_set.all %}
-            <p>{{ announcement.title }}</p>
-            <p>{{ announcement.created_at }}</p>
-            <p>{{ announcement.description }}</p>
+            <p>Title: {{ announcement.title }}</p>
+            <p>Date Posted: {{ announcement.created_at }}</p>
+            <p>Description: {{ announcement.description }}</p>
             <form method="post" action="{% url 'announcement_delete' classroom_id=classroom.id title=announcement.title %}">
               {% csrf_token %}
               <button type="submit">Delete Announcement</button>

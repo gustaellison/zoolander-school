@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import GradesView, StudentGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete, AnnouncementUpdate
+from .views import GradesView, StudentGradesView, MyGradesView, create_assignment, AssignmentListView, AnnouncementDelete,AssignmentDelete, AnnouncementUpdate
 
 urlpatterns = [
     path('', views.home_index, name='home_index'),
@@ -31,10 +31,13 @@ urlpatterns = [
     path('classrooms/<int:pk>/update/', views.ClassroomUpdate.as_view(), name='classroom_update'),
     path('classrooms/<int:pk>/delete/', views.ClassroomDelete.as_view(), name='classroom_delete'),
     path('grades_overview.html', GradesView.as_view(), name='grades_view'),
+    path('grades/<int:student_id>/', MyGradesView.as_view(), name='my_grades'),
     path('student/<int:student_id>/', StudentGradesView.as_view(), name='student_grades'),
     path('create_assignment/', create_assignment, name='create_assignment'),
     path('assignment_list/', AssignmentListView.as_view(), name='assignment_list'),
     path('assignment/<int:pk>/delete/', AssignmentDelete.as_view(), name='assignment_confirm_delete'),
     path('help/', views.help_index, name='help_index'),
     path('meeting/', views.meeting_index, name='meeting_index'),
+    path('teachers/<int:teacher_id>/add_photo/', views.add_photo, {'model_type': 'teacher'}, name='add_teacher_photo'),
+    path('students/<int:student_id>/add_photo/', views.add_photo, {'model_type': 'student'}, name='add_student_photo'),
 ]
