@@ -305,3 +305,7 @@ def add_photo_student(request, student_id):
             print('An error occurred uploading file to S3')
             print(e)
     return redirect('student_detail', student_id=student_id)
+
+def assoc_classroom(request, student_id, classroom_id):
+  Student.objects.get(id=student_id).classroom.add(classroom_id)
+  return render('classroom', classroom_id=classroom_id)
